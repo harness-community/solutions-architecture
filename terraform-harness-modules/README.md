@@ -12,6 +12,15 @@ If you leave out both of these options, the resource will be created at the acco
 
 Most resources shown below will support any of the three scopes.
 
+## authentication
+
+The recommended way to authenticate with the Harness terraform provider is environment variables. At minimum you need to set:
+
+- `HARNESS_ACCOUNT_ID`: your harness account id
+- `HARNESS_PLATFORM_API_KEY`: a user or service account token
+
+You can read more about the provider [here](https://registry.terraform.io/providers/harness/harness/latest/docs) or view our quick-start guide [here](https://developer.harness.io/docs/platform/terraform/harness-terraform-provider/).
+
 ## [structure](https://github.com/harness-community/terraform-harness-structure)
 
 This collection of Terraform modules focuses on the initial setup of Harness Platform configurations and base functionality.
