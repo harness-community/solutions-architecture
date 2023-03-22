@@ -1,0 +1,31 @@
+# Pipeline Template Details
+template:
+  templateRef: ${TEMPLATE_ID}
+  versionLabel: ${TEMPLATE_VERSION}
+  templateInputs:
+    variables:
+      - name: harness_platform_key
+        description: Enter the github identity of the contributor
+        type: Secret
+        value: <+input>
+      - name: contributor_name
+        type: String
+        value: <+input>
+      - name: branch_name
+        type: String
+        value: <+input>
+      - name: repository_name
+        type: String
+        value: <+input>
+      - name: github_connector
+        type: String
+        description: Existing GitHub Connector ID
+        value: <+input>
+      - name: github_username
+        description: GitHub Username
+        type: String
+        value: <+input>
+      - name: github_secret
+        description: GitHub Password Secret
+        type: Secret
+        value: <+input>

@@ -1,0 +1,51 @@
+# Pull Request Trigger
+source:
+  type: Webhook
+  spec:
+    type: Github
+    spec:
+      type: PullRequest
+      spec:
+        connectorRef: account.default_github_access
+        autoAbortPreviousExecutions: false
+        payloadConditions:
+          - key: targetBranch
+            operator: Equals
+            value: main
+          - key: <+trigger.payload.deleted>
+            operator: Equals
+            value: "false"
+        headerConditions: []
+        repoName: ${REPOSITORY}
+        actions:
+          - Open
+          - Reopen
+          - Edit
+          - Synchronize
+inputYaml: |
+  pipeline:
+    identifier: ${PIPELINE_ID}
+    template:
+      templateInputs:
+        variables:
+          - name: harness_platform_key
+            type: Secret
+            value: ${HARNESS_PLATFORM_KEY_SECRET}
+          - name: contributor_name
+            type: String
+            value: <+trigger.gitUser>
+          - name: repository_name
+            type: String
+            value: ${REPOSITORY}
+          - name: branch_name
+            type: String
+            value: <+trigger.sourceBranch>
+          - name: github_connector
+            type: String
+            value: ${GITHUB_CONNECTOR}
+          - name: github_username
+            type: String
+            value: ${GITHUB_USERNAME}
+          - name: github_secret
+            type: Secret
+            value: ${GITHUB_SECRET}
