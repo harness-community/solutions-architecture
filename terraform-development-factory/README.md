@@ -72,7 +72,7 @@ _Example Terraform Versions File_
 | organization_name | Provide an organization name.  Must be two or more characters | string | | X |
 | project_name | Provide an project name.  Must be two or more characters | string | | X |
 | repositories | List of Repositories for which to configure and create pipelines | list(string) | | X |
-| terraform_files | List of Repositories for which to configure and create pipelines | string | | X |
+| terraform_files | File path location where the Terraform files will be sourced for the repository | string | | X |
 | max_concurrency | Maximum concurrency of Terraform Version validations | string | 4 | |
 | enable_triggers | Should we enable the Triggers created by this template | bool | | X |
 | harness_api_key_location | Choose the Secret Location within Harness.  Supported values are account, org, or project. | string | | X |

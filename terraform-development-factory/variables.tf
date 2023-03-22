@@ -40,7 +40,7 @@ variable "repositories" {
 
 variable "terraform_files" {
   type        = string
-  description = "[Required] List of Repositories for which to configure and create pipelines"
+  description = "[Required] File path location where the Terraform files will be sourced for the repository"
 }
 
 variable "max_concurrency" {
