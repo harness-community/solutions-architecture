@@ -12,9 +12,6 @@ source:
           - key: targetBranch
             operator: Equals
             value: main
-          - key: <+trigger.payload.deleted>
-            operator: Equals
-            value: "false"
         headerConditions: []
         repoName: ${REPOSITORY}
         actions:
