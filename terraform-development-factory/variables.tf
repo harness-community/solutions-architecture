@@ -8,12 +8,14 @@ variable "harness_platform_url" {
 variable "harness_platform_account" {
   type        = string
   description = "[Required] Enter the Harness Platform Account Number"
+  default     = null
   sensitive   = true
 }
 
 variable "harness_platform_key" {
   type        = string
   description = "[Required] Enter the Harness Platform API Key for your account"
+  default     = null
   sensitive   = true
 }
 
