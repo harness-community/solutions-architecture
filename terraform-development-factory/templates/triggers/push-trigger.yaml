@@ -6,7 +6,7 @@ source:
     spec:
       type: Push
       spec:
-        connectorRef: account.default_github_access
+        connectorRef: ${GITHUB_CONNECTOR}
         autoAbortPreviousExecutions: false
         payloadConditions:
           - key: targetBranch

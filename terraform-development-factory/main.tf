@@ -39,7 +39,7 @@ module "pipelines" {
     for pipeline in var.repositories : (pipeline) => pipeline
   }
 
-  name            = split("/", each.value)[1]
+  name            = element(split("/", each.value), length(split("/", each.value)) - 1)
   organization_id = module.organization.organization_details.id
   project_id      = module.project.project_details.id
   yaml_data = templatefile(
