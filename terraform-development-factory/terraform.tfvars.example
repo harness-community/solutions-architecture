@@ -1,0 +1,50 @@
+# [Optional] Enter the Harness Platform URL.  Defaults to Harness SaaS URL
+harness_platform_url = "https://app.harness.io/gateway"
+
+# [Required] Enter the Harness Platform Account Number
+harness_platform_account = # Required
+
+# [Required] Enter the Harness Platform API Key for your account
+harness_platform_key = # Required
+
+# [Required] Provide an organization name.  Must be two or more characters
+organization_name = # Required
+
+# [Optional] Should this execution create a new Organization
+create_organization = false
+
+# [Required] Provide an project name.  Must be two or more characters
+project_name = # Required
+
+# [Required] List of Repositories for which to configure and create pipelines
+repositories = # Required
+
+# [Required] List of Repositories for which to configure and create pipelines
+terraform_files = # Required
+
+# [Optional] Maximum concurrency of Terraform Version validations.
+max_concurrency = 4
+
+# [Optional] Should we enable the Triggers created by this template
+enable_triggers = false
+
+# [Required] Choose the Secret Location within Harness.  Supported values are account, org, or project.
+harness_api_key_location = # Required
+
+# [Required] Provide an existing Harness Secret containing the Harness API Key for the pipelines
+harness_api_key_secret = # Required
+
+# [Required] Choose the Connector Location within Harness.  Supported values are account, org, or project.
+github_connector_location = # Required
+
+# [Required] Name of the GitHub Connector to use
+github_connector_id = # Required
+
+# [Required] Username for the GitHub Connection
+github_username = # Required
+
+# [Required] Choose the Secret Location within Harness.  Supported values are account, org, or project.
+github_secret_location = # Required
+
+# [Required] Name of the GitHub secret to use
+github_secret_id = # Required

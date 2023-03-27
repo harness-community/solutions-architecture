@@ -1,0 +1,47 @@
+# Push Trigger
+source:
+  type: Webhook
+  spec:
+    type: Github
+    spec:
+      type: Push
+      spec:
+        connectorRef: ${GITHUB_CONNECTOR}
+        autoAbortPreviousExecutions: false
+        payloadConditions:
+          - key: targetBranch
+            operator: NotEquals
+            value: main
+          - key: <+trigger.payload.deleted>
+            operator: Equals
+            value: "false"
+        headerConditions: []
+        repoName: ${REPOSITORY}
+        actions: []
+inputYaml: |
+  pipeline:
+    identifier: ${PIPELINE_ID}
+    template:
+      templateInputs:
+        variables:
+          - name: harness_platform_key
+            type: Secret
+            value: ${HARNESS_PLATFORM_KEY_SECRET}
+          - name: contributor_name
+            type: String
+            value: <+trigger.gitUser>
+          - name: repository_name
+            type: String
+            value: ${REPOSITORY}
+          - name: branch_name
+            type: String
+            value: <+trigger.targetBranch>
+          - name: github_connector
+            type: String
+            value: ${GITHUB_CONNECTOR}
+          - name: github_username
+            type: String
+            value: ${GITHUB_USERNAME}
+          - name: github_secret
+            type: Secret
+            value: ${GITHUB_SECRET}
