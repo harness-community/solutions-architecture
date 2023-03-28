@@ -90,6 +90,7 @@ _Note: When providing `_ref` values, please ensure that these are prefixed with 
 | harness_platform_url | Enter the Harness Platform URL.  Defaults to Harness SaaS URL | string | https://app.harness.io/gateway | X |
 | harness_platform_account | Enter the Harness Platform Account Number | string | null | X |
 | harness_platform_key | Enter the Harness Platform API Key for your account | string | null | X |
+| harness_api_key_secret | Enter the Harness secret that holds an API key for your account | string | | X |
 | organization_name | Provide an organization name.  Must be two or more characters | string | | X |
 | create_organization | Should this execution create a new Organization | bool | false | X |
 | project_name | Provide an project name.  Must be two or more characters | string | | X |

@@ -46,7 +46,7 @@ stages:
                   assertion: <+httpResponseCode> == 200
                   headers:
                     - key: X-API-KEY
-                      value: <+secrets.getValue("account.harness_platform_key")>
+                      value: <+secrets.getValue("${HARNESS_API_KEY_SECRET}")>
                     - key: Content-Type
                       value: application/json
                   outputVariables: []
@@ -105,7 +105,7 @@ stages:
                   assertion: <+httpResponseCode> == 200
                   headers:
                     - key: X-API-KEY
-                      value: <+secrets.getValue("account.harness_platform_key")>
+                      value: <+secrets.getValue("${HARNESS_API_KEY_SECRET}")>
                     - key: Content-Type
                       value: application/yaml
                   requestBody: |

@@ -15,7 +15,7 @@ spec:
               assertion: <+httpResponseCode> == 200
               headers:
                 - key: X-API-KEY
-                  value: <+secrets.getValue("account.harness_platform_key")>
+                  value: <+secrets.getValue("${HARNESS_API_KEY_SECRET}")>
               outputVariables:
                 - name: agents
                   type: String
@@ -31,7 +31,7 @@ spec:
               assertion: <+httpResponseCode> == 200
               headers:
                 - key: X-API-KEY
-                  value: <+secrets.getValue("account.harness_platform_key")>
+                  value: <+secrets.getValue("${HARNESS_API_KEY_SECRET}")>
               outputVariables:
                 - name: agents
                   type: String

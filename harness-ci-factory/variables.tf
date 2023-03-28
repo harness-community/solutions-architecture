@@ -19,6 +19,11 @@ variable "harness_platform_key" {
   sensitive   = true
 }
 
+variable "harness_api_key_secret" {
+  type        = string
+  description = "[Required] Enter the Harness secret that holds an API key for your account"
+}
+
 variable "organization_name" {
   type        = string
   description = "[Required] Provide an organization name.  Must be two or more characters"

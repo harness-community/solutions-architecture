@@ -25,6 +25,7 @@ module "gather-harness-ci-images-template" {
     "templates/templates/gather-harness-ci-image-list.yaml",
     {
       HARNESS_URL : var.harness_platform_url
+      HARNESS_API_KEY_SECRET : var.harness_api_key_secret
     }
   )
   tags = {
@@ -67,6 +68,7 @@ module "harness-ci-image-factory" {
     "templates/pipelines/harness-ci-image-factory.yaml",
     {
       HARNESS_URL : var.harness_platform_url
+      HARNESS_API_KEY_SECRET : var.harness_api_key_secret
       GATHER_SCAN_TEMPLATE : module.gather-harness-ci-images-template.details.id
       BUILD_PUSH_TEMPLATE : module.build-push-template.details.id
       REGISTRY_NAME : var.container_registry

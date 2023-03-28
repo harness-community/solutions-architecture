@@ -7,6 +7,9 @@ harness_platform_account = # Required
 # [Required] Enter the Harness Platform API Key for your account
 harness_platform_key = # Required
 
+# [Required] Enter the Harness secret that holds an API key for your account
+harness_api_key_secret = # Required
+
 # [Required] Provide an organization name.  Must be two or more characters
 organization_name = # Required
 
