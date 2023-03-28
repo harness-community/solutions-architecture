@@ -1,0 +1,16 @@
+source:
+  type: Scheduled
+  spec:
+    type: Cron
+    spec:
+      expression: ${SCHEDULE}
+inputYaml: |
+  pipeline:
+    identifier: harness_ci_image_factory
+    variables:
+      - name: registry
+        type: String
+        value: ${REGISTRY_NAME}
+      - name: is_retry
+        type: String
+        value: "false"

@@ -1,0 +1,139 @@
+stages:
+  - stage:
+      name: Gather Harness Images
+      identifier: gather_harness_images
+      description: Reads official Harness API to gather a list of the Harness Images used for pipeline execution
+      template:
+        templateRef: ${GATHER_SCAN_TEMPLATE}
+  - stage:
+      name: Build and Push Images
+      identifier: build_and_push_images
+      description: ""
+      template:
+        templateRef: ${BUILD_PUSH_TEMPLATE}
+      strategy:
+        repeat:
+          items: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images.split(",")>
+          maxConcurrency: ${MAX_CONCURRENCY}
+      variables:
+        - name: IMAGE_NAME
+          type: String
+          value: <+repeat.item.split("=")[1].split(":")[0]>
+        - name: IMAGE_VERSION
+          type: String
+          value: <+repeat.item.split("=")[1].split(":")[1]>
+        - name: IMAGE
+          type: String
+          value: <+repeat.item.split("=")[1]>
+      when:
+        pipelineStatus: Success
+        condition: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != ""
+  - stage:
+      name: Update Harness CI Image Configuration
+      identifier: update_harness_ci_image_configuration
+      description: "This stage will update the Harness Platform to use the newly pushed images as the default versions when running CI pipelines"
+      type: Custom
+      spec:
+        execution:
+          steps:
+            - step:
+                type: Http
+                name: Update Custom Configuration of Images
+                identifier: Update_Custom_Configuration_of_Images
+                spec:
+                  url: ${HARNESS_URL}/ci/execution-config/update-config?accountIdentifier=<+account.identifier>&infra=k8
+                  method: POST
+                  assertion: <+httpResponseCode> == 200
+                  headers:
+                    - key: X-API-KEY
+                      value: <+secrets.getValue("account.harness_platform_key")>
+                    - key: Content-Type
+                      value: application/json
+                  outputVariables: []
+                  requestBody: |
+                    [
+                        {
+                            "field": "<+repeat.item.split("=")[0]>",
+                            "value": "<+pipeline.variables.registry>/<+repeat.item.split("=")[1]>"
+                        }
+                    ]
+                timeout: 30s
+      tags: {}
+      strategy:
+        repeat:
+          items: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images.split(",")>
+          maxConcurrency: ${MAX_CONCURRENCY}
+      when:
+        pipelineStatus: Success
+        condition: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != ""
+  - stage:
+      name: Pause to recheck status
+      identifier: pause_to_recheck_status
+      description: ""
+      type: Custom
+      spec:
+        execution:
+          steps:
+            - step:
+                type: Wait
+                name: Wait for 30 seconds
+                identifier: Wait_for_30_seconds
+                spec:
+                  duration: 30s
+      tags: {}
+  - stage:
+      name: Verify Harness Images
+      identifier: verify_harness_images
+      description: Reads official Harness API to gather a list of the Harness Images used for pipeline execution
+      template:
+        templateRef: ${GATHER_SCAN_TEMPLATE}
+  - stage:
+      name: Build Missing Images
+      identifier: build_missing_images
+      description: "If additional images have been found, we will retrigger this pipeline to resolve the missing images"
+      type: Custom
+      spec:
+        execution:
+          steps:
+            - step:
+                type: Http
+                name: Missing Images Require Execution
+                identifier: Missing_Images_Require_Execution
+                spec:
+                  url: ${HARNESS_URL}/pipeline/api/pipeline/execute/<+pipeline.identifier>?accountIdentifier=<+account.identifier>&orgIdentifier=<+org.identifier>&projectIdentifier=<+project.identifier>
+                  method: POST
+                  assertion: <+httpResponseCode> == 200
+                  headers:
+                    - key: X-API-KEY
+                      value: <+secrets.getValue("account.harness_platform_key")>
+                    - key: Content-Type
+                      value: application/yaml
+                  requestBody: |
+                    pipeline:
+                      identifier: <+pipeline.identifier>
+                      variables:
+                        - name: registry
+                          value: <+pipeline.variables.registry>
+                        - name: is_retry
+                          value: "true"
+                  outputVariables: []
+                timeout: 30s
+                when:
+                  stageStatus: Success
+                  condition: "!<+pipeline.variables.is_retry>"
+      tags: {}
+      when:
+        condition: <+pipeline.stages.verify_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != ""
+        pipelineStatus: Success
+variables:
+  - name: registry
+    description: Container Registry to which the image will be saved and stored.
+    type: String
+    value: <+input>
+    default: ${REGISTRY_NAME}
+  - name: is_retry
+    description: Container Registry to which the image will be saved and stored.
+    type: String
+    value: <+input>.allowedValues(true,false)
+    default: "false"
+

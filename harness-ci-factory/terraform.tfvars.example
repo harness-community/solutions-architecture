@@ -1,0 +1,44 @@
+# [Optional] Enter the Harness Platform URL.  Defaults to Harness SaaS URL
+harness_platform_url = "https://app.harness.io/gateway"
+
+# [Required] Enter the Harness Platform Account Number
+harness_platform_account = # Required
+
+# [Required] Enter the Harness Platform API Key for your account
+harness_platform_key = # Required
+
+# [Required] Provide an organization name.  Must be two or more characters
+organization_name = # Required
+
+# [Optional] Should this execution create a new Organization
+create_organization = false
+
+# [Required] Provide an project name.  Must be two or more characters
+project_name = # Required
+
+# [Optional] Should this execution create a new Project
+create_project = false
+
+# [Required] Container Registry to which the image will be saved and stored
+container_registry = # Required
+
+# [Required] Type of Container Registry to which images will be pushed. Supported Values - azure or docker
+container_registry_type = # Required
+
+# [Required] Container Registry Connector Reference
+container_registry_connector_ref = # Required
+
+# [Required] Kubernetes Connector Reference
+kubernetes_connector_ref = # Required
+
+# [Required] Kubernetes Namespace within Cluster in which the CI process will build
+kubernetes_namespace = # Required
+
+# [Optional] Maximum number of simultaneous builds to perform
+max_build_concurrency = 5
+
+# [Optional] Should we enable the execution of this pipeline to run on a schedule?
+enable_schedule = false
+
+# [Optional] Cron Format schedule for when and how frequently to schedule this pipeline
+schedule = "0 2 * * *"

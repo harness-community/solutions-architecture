@@ -1,0 +1,59 @@
+# Gather and Collate available and in-use Harness CI Image details
+spec:
+  type: CI
+  spec:
+    cloneCodebase: false
+    infrastructure:
+      type: KubernetesDirect
+      spec:
+        connectorRef: ${KUBERNETES_CONNECTOR_REF}
+        namespace: ${KUBERNETES_NAMESPACE}
+        automountServiceAccountToken: true
+        nodeSelector: {}
+        os: Linux
+    execution:
+      steps:
+        - step:
+            identifier: Generate_Dockerfile
+            name: Generate Dockerfile
+            description: This step will create a new Dockerfile to be leveraged in the upcoming Build and Push step.  In addition this step leverages the RUNNER_IMAGE retrieved from the 'Gather Harness Images' stage.
+            type: Run
+            spec:
+              connectorRef: account.harnessImage
+              image: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.runner>
+              shell: Sh
+              command: |
+                set -eo pipefail
+                set +x
+                echo "Generating Dockerfile for $IMAGE"
+                echo "--------------"
+                mkdir -p $IMAGE_NAME
+                cat <<EOF >$IMAGE_NAME/Dockerfile
+                FROM $IMAGE
+                EOF
+                echo
+                echo "Display Generated Dockerfile"
+                echo "--------------"
+                cat $IMAGE_NAME/Dockerfile
+              envVariables:
+                IMAGE: <+stage.variables.IMAGE>
+                IMAGE_NAME: <+stage.variables.IMAGE_NAME>
+        - step:
+            type: BuildAndPushDockerRegistry
+            identifier: BuildandPushtoDocker
+            name: Build and Push to Docker
+            spec:
+              connectorRef: ${CONTAINER_REGISTRY_CONNECTOR}
+              repo: <+pipeline.variables.registry>/<+stage.variables.IMAGE_NAME>
+              tags:
+                - <+stage.variables.IMAGE_VERSION>
+              dockerfile: <+stage.variables.IMAGE_NAME>/Dockerfile
+            failureStrategies: []
+            when:
+              stageStatus: Success
+  tags: {}
+  variables:
+    - description: ""
+      name: images
+      type: String
+      value: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images>
