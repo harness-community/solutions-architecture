@@ -1,0 +1,46 @@
+
+stages:
+  - stage:
+      name: Gather Harness Images
+      identifier: gather_harness_images
+      description: Reads official Harness API to gather a list of the Harness Images used for pipeline execution
+      template:
+        templateRef: ${GATHER_SCAN_TEMPLATE}
+  - stage:
+      name: CLEANUP
+      identifier: CLEANUP
+      description: ""
+      type: Custom
+      spec:
+        execution:
+          steps:
+            - step:
+                type: Http
+                name: Reset Custom Configuration of Images
+                identifier: Reset_Custom_Configuration_of_Images
+                spec:
+                  url: ${HARNESS_URL}/ci/execution-config/reset-config?accountIdentifier=<+account.identifier>&infra=k8
+                  method: POST
+                  assertion: <+httpResponseCode> == 200
+                  headers:
+                    - key: X-API-KEY
+                      value: <+secrets.getValue("${HARNESS_API_KEY_SECRET}")>
+                    - key: Content-Type
+                      value: application/json
+                  outputVariables: []
+                  requestBody: "[    {        \"field\": \"<+stage.variables.field_name>\"    }]"
+                timeout: 30s
+      tags: {}
+      when:
+        pipelineStatus: Success
+      strategy:
+        repeat:
+          items: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images.split(",")>
+          maxConcurrency: 5
+      variables:
+        - name: field_name
+          type: String
+          description: ""
+          value: <+repeat.item.split("=")[0]>
+timeout: 10m
+variables: []

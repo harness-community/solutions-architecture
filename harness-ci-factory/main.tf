@@ -62,6 +62,7 @@ module "harness-ci-image-factory" {
   source = "git@github.com:harness-community/terraform-harness-content.git//modules/pipelines"
 
   name            = "Harness CI Image Factory"
+  description     = "This pipeline will find, build, push, and configure Harness Platform to retrieve CI build images from a custom registry"
   organization_id = module.organization.organization_details.id
   project_id      = module.project.project_details.id
   yaml_data = templatefile(
@@ -76,6 +77,27 @@ module "harness-ci-image-factory" {
       CONTAINER_REGISTRY_CONNECTOR : var.container_registry_connector_ref
       KUBERNETES_CONNECTOR_REF : var.kubernetes_connector_ref
       KUBERNETES_NAMESPACE : var.kubernetes_namespace
+    }
+  )
+  tags = {
+    role = "harness-ci-image-factory"
+  }
+
+}
+
+module "harness-ci-image-factory-cleanup" {
+  source = "git@github.com:harness-community/terraform-harness-content.git//modules/pipelines"
+
+  name            = "Harness CI Image Factory - Reset Images to Harness"
+  description     = "This pipeline will reset the custom images back to the default Harness Platform values"
+  organization_id = module.organization.organization_details.id
+  project_id      = module.project.project_details.id
+  yaml_data = templatefile(
+    "templates/pipelines/harness-ci-image-reset.yaml",
+    {
+      HARNESS_URL : var.harness_platform_url
+      HARNESS_API_KEY_SECRET : var.harness_api_key_secret
+      GATHER_SCAN_TEMPLATE : module.gather-harness-ci-images-template.details.id
     }
   )
   tags = {
