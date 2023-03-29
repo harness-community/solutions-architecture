@@ -1,6 +1,6 @@
 module "organization" {
   source  = "harness-community/structure/harness//modules/organizations"
-  version = "0.1.0"
+  version = "0.1.2"
 
   name     = var.organization_name
   existing = var.create_organization ? false : true
@@ -8,10 +8,10 @@ module "organization" {
 
 module "project" {
   source  = "harness-community/structure/harness//modules/projects"
-  version = "0.1.0"
+  version = "0.1.2"
 
   name            = var.project_name
-  organization_id = module.organization.organization_details.id
+  organization_id = module.organization.details.id
 }
 
 module "templates" {
@@ -19,10 +19,10 @@ module "templates" {
   version = "0.1.1"
 
   name            = "Terraform Validation"
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   yaml_data = templatefile(
-    "templates/templates/terraform-deployment.yaml",
+    "${path.module}/templates/templates/terraform-deployment.yaml",
     {
       TERRAFORM_FILES_PATH : var.terraform_files
       MAX_CONCURRENCY : var.max_concurrency
@@ -45,10 +45,10 @@ module "pipelines" {
   }
 
   name            = element(split("/", each.value), length(split("/", each.value)) - 1)
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   yaml_data = templatefile(
-    "templates/pipelines/terraform-module-execution.yaml",
+    "${path.module}/templates/pipelines/terraform-module-execution.yaml",
     {
       REPOSITORY : each.value
       TEMPLATE_ID : module.templates.details.id
@@ -70,12 +70,12 @@ module "push_triggers" {
   }
 
   name            = "Feature Push"
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   pipeline_id     = module.pipelines[each.value].details.id
   trigger_enabled = var.enable_triggers
   yaml_data = templatefile(
-    "templates/triggers/push-trigger.yaml",
+    "${path.module}/templates/triggers/push-trigger.yaml",
     {
       HARNESS_PLATFORM_KEY_SECRET = (
         var.harness_api_key_location != "project"
@@ -118,12 +118,12 @@ module "pull_request_triggers" {
   }
 
   name            = "Pull Request"
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   pipeline_id     = module.pipelines[each.value].details.id
   trigger_enabled = var.enable_triggers
   yaml_data = templatefile(
-    "templates/triggers/pull-request-trigger.yaml",
+    "${path.module}/templates/triggers/pull-request-trigger.yaml",
     {
       HARNESS_PLATFORM_KEY_SECRET = (
         var.harness_api_key_location != "project"
