@@ -22,7 +22,7 @@ module "gather-harness-ci-images-template" {
   template_version = "v1.0.0"
   type             = "Stage"
   yaml_data = templatefile(
-    "templates/templates/gather-harness-ci-image-list.yaml",
+    "${path.module}/templates/templates/gather-harness-ci-image-list.yaml",
     {
       HARNESS_URL : var.harness_platform_url
       HARNESS_API_KEY_SECRET : var.harness_api_key_secret
