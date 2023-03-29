@@ -93,7 +93,7 @@ module "harness-ci-image-factory-cleanup" {
   organization_id = module.organization.organization_details.id
   project_id      = module.project.project_details.id
   yaml_data = templatefile(
-    "templates/pipelines/harness-ci-image-reset.yaml",
+    "${path.module}/templates/pipelines/harness-ci-image-reset.yaml",
     {
       HARNESS_URL : var.harness_platform_url
       HARNESS_API_KEY_SECRET : var.harness_api_key_secret
