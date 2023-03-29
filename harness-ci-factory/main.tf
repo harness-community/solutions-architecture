@@ -1,5 +1,6 @@
 module "organization" {
-  source = "github.com/harness-community/terraform-harness-structure//modules/organizations"
+  source  = "harness-community/structure/harness//modules/organizations"
+  version = "0.1.0"
 
   name     = var.organization_name
   existing = var.create_organization ? false : true
