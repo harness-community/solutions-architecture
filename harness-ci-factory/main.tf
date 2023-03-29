@@ -115,7 +115,7 @@ module "pipeline-execution-schedule" {
   pipeline_id     = module.harness-ci-image-factory.details.id
   trigger_enabled = var.enable_schedule
   yaml_data = templatefile(
-    "templates/triggers/retrieve-and-build-images.yaml",
+    "${path.module}/templates/triggers/retrieve-and-build-images.yaml",
     {
       SCHEDULE : var.schedule
       REGISTRY_NAME : var.container_registry
