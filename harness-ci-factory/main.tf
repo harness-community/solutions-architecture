@@ -43,7 +43,7 @@ module "build-push-template" {
   template_version = "v1.0.0"
   type             = "Stage"
   yaml_data = templatefile(
-    "templates/templates/${lookup(local.build_push_target, var.container_registry_type, "MISSING-REGISTRY-TEMPLATE")}",
+    "${path.module}/templates/templates/${lookup(local.build_push_target, var.container_registry_type, "MISSING-REGISTRY-TEMPLATE")}",
     {
       REGISTRY_NAME : var.container_registry
       MAX_CONCURRENCY : var.max_build_concurrency
