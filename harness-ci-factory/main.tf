@@ -7,7 +7,8 @@ module "organization" {
 }
 
 module "project" {
-  source = "github.com/harness-community/terraform-harness-structure//modules/projects"
+  source  = "harness-community/structure/harness//modules/projects"
+  version = "0.1.0"
 
   name            = var.project_name
   organization_id = module.organization.organization_details.id
