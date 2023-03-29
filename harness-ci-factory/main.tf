@@ -63,7 +63,8 @@ module "build-push-template" {
 }
 
 module "harness-ci-image-factory" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/pipelines"
+  source  = "harness-community/content/harness//modules/pipelines"
+  version = "0.1.0"
 
   name            = "Harness CI Image Factory"
   description     = "This pipeline will find, build, push, and configure Harness Platform to retrieve CI build images from a custom registry"
