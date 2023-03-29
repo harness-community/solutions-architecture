@@ -1,19 +1,22 @@
 module "organization" {
-  source = "github.com/harness-community/terraform-harness-structure//modules/organizations"
+  source  = "harness-community/structure/harness//modules/organizations"
+  version = "0.1.0"
 
   name     = var.organization_name
   existing = var.create_organization ? false : true
 }
 
 module "project" {
-  source = "github.com/harness-community/terraform-harness-structure//modules/projects"
+  source  = "harness-community/structure/harness//modules/projects"
+  version = "0.1.0"
 
   name            = var.project_name
   organization_id = module.organization.organization_details.id
 }
 
 module "templates" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/templates"
+  source  = "harness-community/content/harness//modules/templates"
+  version = "0.1.1"
 
   name            = "Terraform Validation"
   organization_id = module.organization.organization_details.id
@@ -34,7 +37,9 @@ module "templates" {
 }
 
 module "pipelines" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/pipelines"
+  source  = "harness-community/content/harness//modules/pipelines"
+  version = "0.1.1"
+
   for_each = {
     for pipeline in var.repositories : (pipeline) => pipeline
   }
@@ -57,7 +62,9 @@ module "pipelines" {
 
 }
 module "push_triggers" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/triggers"
+  source  = "harness-community/content/harness//modules/triggers"
+  version = "0.1.1"
+
   for_each = {
     for pipeline in var.repositories : (pipeline) => pipeline
   }
@@ -103,7 +110,9 @@ module "push_triggers" {
 }
 
 module "pull_request_triggers" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/triggers"
+  source  = "harness-community/content/harness//modules/triggers"
+  version = "0.1.1"
+
   for_each = {
     for pipeline in var.repositories : (pipeline) => pipeline
   }

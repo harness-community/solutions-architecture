@@ -216,7 +216,8 @@ To deploy into a k8s cluster we need a connector. Connectors can use one of many
 
 ```terraform
 module "dev_k8s_delegate" {
-  source = "git@github.com:harness-community/terraform-harness-connectors.git//modules/kubernetes/cluster"
+  source = "harness-community/connectors/harness//modules/kubernetes/cluster"
+  version = "0.1.1"
 
   organization_id    = module.org_foo.organization_details.id
   project_id         = module.project_appX.project_details.id
@@ -233,7 +234,8 @@ To grab manifests and values from GitHub, we can create a connector using PAT or
 
 ```terraform
 module "github" {
-  source = "git@github.com:harness-community/terraform-harness-connectors.git//modules/scms/github"
+  source = "harness-community/connectors/harness//modules/scms/github"
+  version = "0.1.1"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id
@@ -382,7 +384,8 @@ Creating a pipeline using terraform is as easy as placing the yaml into the reso
 
 ```terraform
 module "pipelines" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/pipelines"
+  source = "harness-community/content/harness//modules/pipelines"
+  version = "0.1.1"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id
@@ -424,7 +427,8 @@ We can also create templates for any resource using terraform, again by just pas
 
 ```terraform
 module "template" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/templates"
+  source = "harness-community/content/harness//modules/templates"
+  version = "0.1.1"
 
   name             = "sample-step-template"
   yaml_data        = <<EOT

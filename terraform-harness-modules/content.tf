@@ -1,5 +1,6 @@
 module "pipeline" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/pipelines"
+  source  = "harness-community/content/harness//modules/pipelines"
+  version = "0.1.1"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id
@@ -35,7 +36,8 @@ module "pipeline" {
 }
 
 module "template" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/templates"
+  source  = "harness-community/content/harness//modules/templates"
+  version = "0.1.1"
 
   name             = "sample-step-template"
   yaml_data        = <<EOT
