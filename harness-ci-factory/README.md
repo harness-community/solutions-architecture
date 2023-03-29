@@ -26,6 +26,8 @@ module "harness-ci-factory" {
 
 After pulling, building, and pushing the images to your registry you will need to edit the `harnessImage` docker connector in your Harness account to point that the registry you pushed to using this module (specified by the `container_registry` input).
 
+![image](https://user-images.githubusercontent.com/7338312/228593992-c5ad744b-ee5d-4dd2-b68a-0fdf968c90d6.png)
+
 ## Summary
 
 As the Harness Solutions Architecture team, we have developed a pipeline to manage the ingestion of Harness CI Build images into a customer maintained Container Registry.  This template will build and deliver the following:
