@@ -90,7 +90,8 @@ module "harness-ci-image-factory" {
 }
 
 module "harness-ci-image-factory-cleanup" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/pipelines"
+  source  = "harness-community/content/harness//modules/pipelines"
+  version = "0.1.0"
 
   name            = "Harness CI Image Factory - Reset Images to Harness"
   description     = "This pipeline will reset the custom images back to the default Harness Platform values"
