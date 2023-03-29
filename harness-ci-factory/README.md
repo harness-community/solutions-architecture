@@ -1,8 +1,27 @@
 # Harness CI Image Factory
 A collection of Terraform resources centered around the implementation of the Harness CI Factory Pipeline to support managing Harness CI Container Images
 
-## Goal
-TODO
+## TLDR
+
+```terraform
+module "harness-ci-factory" {
+  source = "git@github.com:harness-community/solutions-architecture.git//harness-ci-factory?ref=main"
+
+  harness_api_key_secret           = "account.harness_api_token"
+  organization_name                = "harness-ci-factory"
+  create_organization              = true
+  project_name                     = "harness-ci-factory"
+  create_project                   = true
+  container_registry               = "registry.example.com"
+  container_registry_type          = "docker"
+  container_registry_connector_ref = "account.registry_example_com"
+  kubernetes_connector_ref         = "account.example_cluster"
+  kubernetes_namespace             = "harnesscifactory"
+  max_build_concurrency            = 5
+  enable_schedule                  = false
+  schedule                         = "0 2 * * *"
+}
+```
 
 ## Summary
 As the Harness Solutions Architecture team, we have developed a pipeline to manage the injestion of Harness CI Build images into a customer maintained Container Registry.  This template will build and deliver the following:

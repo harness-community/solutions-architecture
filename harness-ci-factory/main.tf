@@ -1,6 +1,6 @@
 module "organization" {
   source  = "harness-community/structure/harness//modules/organizations"
-  version = "0.1.0"
+  version = "0.1.1"
 
   name     = var.organization_name
   existing = var.create_organization ? false : true
@@ -8,7 +8,7 @@ module "organization" {
 
 module "project" {
   source  = "harness-community/structure/harness//modules/projects"
-  version = "0.1.0"
+  version = "0.1.1"
 
   name            = var.project_name
   organization_id = module.organization.organization_details.id
