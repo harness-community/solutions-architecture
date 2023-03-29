@@ -112,7 +112,8 @@ module "harness-ci-image-factory-cleanup" {
 }
 
 module "pipeline-execution-schedule" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/triggers"
+  source  = "harness-community/content/harness//modules/triggers"
+  version = "0.1.0"
 
   name            = "Retrieve and Build Images"
   organization_id = module.organization.organization_details.id
