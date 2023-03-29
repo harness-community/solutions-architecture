@@ -66,7 +66,7 @@ module "harness-ci-image-factory" {
   organization_id = module.organization.organization_details.id
   project_id      = module.project.project_details.id
   yaml_data = templatefile(
-    "templates/pipelines/harness-ci-image-factory.yaml",
+    "${path.module}/templates/pipelines/harness-ci-image-factory.yaml",
     {
       HARNESS_URL : var.harness_platform_url
       HARNESS_API_KEY_SECRET : var.harness_api_key_secret
