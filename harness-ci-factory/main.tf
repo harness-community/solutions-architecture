@@ -38,7 +38,8 @@ module "gather-harness-ci-images-template" {
 }
 
 module "build-push-template" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/templates"
+  source  = "harness-community/content/harness//modules/templates"
+  version = "0.1.0"
 
   name             = "Build and Push Harness CI Standard Images"
   organization_id  = module.organization.organization_details.id
