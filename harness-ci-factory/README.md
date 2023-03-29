@@ -1,4 +1,5 @@
 # Harness CI Image Factory
+
 A collection of Terraform resources centered around the implementation of the Harness CI Factory Pipeline to support managing Harness CI Container Images
 
 ## TLDR
@@ -26,6 +27,7 @@ module "harness-ci-factory" {
 After pulling, building, and pushing the images to your registry you will need to edit the `harnessImage` docker connector in your Harness account to point that the registry you pushed to using this module (specified by the `container_registry` input).
 
 ## Summary
+
 As the Harness Solutions Architecture team, we have developed a pipeline to manage the ingestion of Harness CI Build images into a customer maintained Container Registry.  This template will build and deliver the following:
 
 - An optional new Harness Organization
@@ -39,9 +41,11 @@ _Note: The created pipeline has a built-in retry mechanism which will automatica
 
 
 ## Providers
+
 This module requires that the calling template has defined the [Harness Provider - Docs](https://registry.terraform.io/providers/harness/harness/latest/docs) authentication.
 
 ### Example setup of the Harness Provider Authentication with environment variables
+
 You can also set up authentication with Harness through environment variables. To do this set the following items in your environment:
 - HARNESS_ACCOUNT_ID: Harness Platform Account Number
 - HARNESS_PLATFORM_API_KEY: Harness Platform API Key for your account
@@ -49,6 +53,7 @@ You can also set up authentication with Harness through environment variables. T
 _Note: The use of the HARNESS_ENDPOINT environment variable is not used as the variable `harness_platform_url` is a required input for some of the resource creation steps and cannot be read within the execution except by explicit declaration of the variables value_
 
 ### Example setup of the Harness Provider
+
 ```
 # Provider Setup Details
 variable "harness_platform_url" {
@@ -80,6 +85,7 @@ provider "harness" {
 ```
 
 ### Terraform required providers declaration
+
 ```
 terraform {
   required_providers {
@@ -97,6 +103,7 @@ terraform {
 ```
 
 ## Requirements
+
 The following items will be required to be preconfigured in our Harness Account
 - Harness Service Account with an API Key
 - Kubernetes Connector with a chosen namespace for execution of the Build Pods
@@ -109,8 +116,6 @@ _Note: When providing `_ref` values, please ensure that these are prefixed with 
 | Name | Description | Type | Default Value | Mandatory |
 | --- | --- | --- | --- | --- |
 | harness_platform_url | Enter the Harness Platform URL.  Defaults to Harness SaaS URL | string | https://app.harness.io/gateway | X |
-| harness_platform_account | Enter the Harness Platform Account Number | string | null | X |
-| harness_platform_key | Enter the Harness Platform API Key for your account | string | null | X |
 | harness_api_key_secret | Enter the Harness secret that holds an API key for your account | string | | X |
 | organization_name | Provide an organization name.  Must be two or more characters | string | | X |
 | create_organization | Should this execution create a new Organization | bool | false | X |
@@ -126,22 +131,25 @@ _Note: When providing `_ref` values, please ensure that these are prefixed with 
 | schedule | Cron Format schedule for when and how frequently to schedule this pipeline | string | "0 2 * * *" | |
 
 
-
 ## Terraform TFVARS
+
 Included in this repository is a `terraform.tfvars.example` file with a sample file that can be used to construct your own `terraform.tfvars` file.
 
 - Save a copy of the file as `terraform.tfvars`
 - Update the variable values listed in the new TFVAR file
 
 ## Outputs
+
 | Name | Description | Value |
 | --- | --- | --- |
 | pipeline | Details for the created Harness pipeline | Map containing details of created pipeline |
 
 ## Contributing
+
 A complete [Contributors Guide](../CONTRIBUTING.md) can be found in this repository
 
 ## Authors
+
 Module is maintained by Harness, Inc
 
 ## License

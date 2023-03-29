@@ -1,6 +1,6 @@
 module "organization" {
   source  = "harness-community/structure/harness//modules/organizations"
-  version = "0.1.1"
+  version = "0.1.2"
 
   name     = var.organization_name
   existing = var.create_organization ? false : true
@@ -8,10 +8,10 @@ module "organization" {
 
 module "project" {
   source  = "harness-community/structure/harness//modules/projects"
-  version = "0.1.1"
+  version = "0.1.2"
 
   name            = var.project_name
-  organization_id = module.organization.organization_details.id
+  organization_id = module.organization.details.id
   existing        = var.create_project ? false : true
 }
 
@@ -20,8 +20,8 @@ module "gather-harness-ci-images-template" {
   version = "0.1.1"
 
   name             = "Gather Harness CI Images"
-  organization_id  = module.organization.organization_details.id
-  project_id       = module.project.project_details.id
+  organization_id  = module.organization.details.id
+  project_id       = module.project.details.id
   template_version = "v1.0.0"
   type             = "Stage"
   yaml_data = templatefile(
@@ -42,8 +42,8 @@ module "build-push-template" {
   version = "0.1.1"
 
   name             = "Build and Push Harness CI Standard Images"
-  organization_id  = module.organization.organization_details.id
-  project_id       = module.project.project_details.id
+  organization_id  = module.organization.details.id
+  project_id       = module.project.details.id
   template_version = "v1.0.0"
   type             = "Stage"
   yaml_data = templatefile(
@@ -68,8 +68,8 @@ module "harness-ci-image-factory" {
 
   name            = "Harness CI Image Factory"
   description     = "This pipeline will find, build, push, and configure Harness Platform to retrieve CI build images from a custom registry"
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   yaml_data = templatefile(
     "${path.module}/templates/pipelines/harness-ci-image-factory.yaml",
     {
@@ -96,8 +96,8 @@ module "harness-ci-image-factory-cleanup" {
 
   name            = "Harness CI Image Factory - Reset Images to Harness"
   description     = "This pipeline will reset the custom images back to the default Harness Platform values"
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   yaml_data = templatefile(
     "${path.module}/templates/pipelines/harness-ci-image-reset.yaml",
     {
@@ -117,8 +117,8 @@ module "pipeline-execution-schedule" {
   version = "0.1.1"
 
   name            = "Retrieve and Build Images"
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   pipeline_id     = module.harness-ci-image-factory.details.id
   trigger_enabled = var.enable_schedule
   yaml_data = templatefile(
