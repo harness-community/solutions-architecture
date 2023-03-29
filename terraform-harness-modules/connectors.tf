@@ -1,5 +1,6 @@
 module "dev_k8s_delegate" {
-  source = "git@github.com:harness-community/terraform-harness-connectors.git//modules/kubernetes/cluster"
+  source  = "harness-community/connectors/harness//modules/kubernetes/cluster"
+  version = "0.1.1"
 
   organization_id    = module.org_foo.organization_details.id
   project_id         = module.project_appX.project_details.id
@@ -8,7 +9,8 @@ module "dev_k8s_delegate" {
 }
 
 module "github" {
-  source = "git@github.com:harness-community/terraform-harness-connectors.git//modules/scms/github"
+  source  = "harness-community/connectors/harness//modules/scms/github"
+  version = "0.1.1"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id

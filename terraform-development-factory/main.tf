@@ -1,25 +1,28 @@
 module "organization" {
-  source = "github.com/harness-community/terraform-harness-structure//modules/organizations"
+  source  = "harness-community/structure/harness//modules/organizations"
+  version = "0.1.2"
 
   name     = var.organization_name
   existing = var.create_organization ? false : true
 }
 
 module "project" {
-  source = "github.com/harness-community/terraform-harness-structure//modules/projects"
+  source  = "harness-community/structure/harness//modules/projects"
+  version = "0.1.2"
 
   name            = var.project_name
-  organization_id = module.organization.organization_details.id
+  organization_id = module.organization.details.id
 }
 
 module "templates" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/templates"
+  source  = "harness-community/content/harness//modules/templates"
+  version = "0.1.1"
 
   name            = "Terraform Validation"
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   yaml_data = templatefile(
-    "templates/templates/terraform-deployment.yaml",
+    "${path.module}/templates/templates/terraform-deployment.yaml",
     {
       TERRAFORM_FILES_PATH : var.terraform_files
       MAX_CONCURRENCY : var.max_concurrency
@@ -34,16 +37,18 @@ module "templates" {
 }
 
 module "pipelines" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/pipelines"
+  source  = "harness-community/content/harness//modules/pipelines"
+  version = "0.1.1"
+
   for_each = {
     for pipeline in var.repositories : (pipeline) => pipeline
   }
 
   name            = element(split("/", each.value), length(split("/", each.value)) - 1)
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   yaml_data = templatefile(
-    "templates/pipelines/terraform-module-execution.yaml",
+    "${path.module}/templates/pipelines/terraform-module-execution.yaml",
     {
       REPOSITORY : each.value
       TEMPLATE_ID : module.templates.details.id
@@ -57,18 +62,20 @@ module "pipelines" {
 
 }
 module "push_triggers" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/triggers"
+  source  = "harness-community/content/harness//modules/triggers"
+  version = "0.1.1"
+
   for_each = {
     for pipeline in var.repositories : (pipeline) => pipeline
   }
 
   name            = "Feature Push"
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   pipeline_id     = module.pipelines[each.value].details.id
   trigger_enabled = var.enable_triggers
   yaml_data = templatefile(
-    "templates/triggers/push-trigger.yaml",
+    "${path.module}/templates/triggers/push-trigger.yaml",
     {
       HARNESS_PLATFORM_KEY_SECRET = (
         var.harness_api_key_location != "project"
@@ -103,18 +110,20 @@ module "push_triggers" {
 }
 
 module "pull_request_triggers" {
-  source = "git@github.com:harness-community/terraform-harness-content.git//modules/triggers"
+  source  = "harness-community/content/harness//modules/triggers"
+  version = "0.1.1"
+
   for_each = {
     for pipeline in var.repositories : (pipeline) => pipeline
   }
 
   name            = "Pull Request"
-  organization_id = module.organization.organization_details.id
-  project_id      = module.project.project_details.id
+  organization_id = module.organization.details.id
+  project_id      = module.project.details.id
   pipeline_id     = module.pipelines[each.value].details.id
   trigger_enabled = var.enable_triggers
   yaml_data = templatefile(
-    "templates/triggers/pull-request-trigger.yaml",
+    "${path.module}/templates/triggers/pull-request-trigger.yaml",
     {
       HARNESS_PLATFORM_KEY_SECRET = (
         var.harness_api_key_location != "project"
