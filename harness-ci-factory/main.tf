@@ -17,7 +17,7 @@ module "project" {
 
 module "gather-harness-ci-images-template" {
   source  = "harness-community/content/harness//modules/templates"
-  version = "0.1.0"
+  version = "0.1.1"
 
   name             = "Gather Harness CI Images"
   organization_id  = module.organization.organization_details.id
@@ -39,7 +39,7 @@ module "gather-harness-ci-images-template" {
 
 module "build-push-template" {
   source  = "harness-community/content/harness//modules/templates"
-  version = "0.1.0"
+  version = "0.1.1"
 
   name             = "Build and Push Harness CI Standard Images"
   organization_id  = module.organization.organization_details.id
@@ -64,7 +64,7 @@ module "build-push-template" {
 
 module "harness-ci-image-factory" {
   source  = "harness-community/content/harness//modules/pipelines"
-  version = "0.1.0"
+  version = "0.1.1"
 
   name            = "Harness CI Image Factory"
   description     = "This pipeline will find, build, push, and configure Harness Platform to retrieve CI build images from a custom registry"
@@ -92,7 +92,7 @@ module "harness-ci-image-factory" {
 
 module "harness-ci-image-factory-cleanup" {
   source  = "harness-community/content/harness//modules/pipelines"
-  version = "0.1.0"
+  version = "0.1.1"
 
   name            = "Harness CI Image Factory - Reset Images to Harness"
   description     = "This pipeline will reset the custom images back to the default Harness Platform values"

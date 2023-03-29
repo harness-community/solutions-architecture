@@ -24,7 +24,7 @@ module "harness-ci-factory" {
 ```
 
 ## Summary
-As the Harness Solutions Architecture team, we have developed a pipeline to manage the injestion of Harness CI Build images into a customer maintained Container Registry.  This template will build and deliver the following:
+As the Harness Solutions Architecture team, we have developed a pipeline to manage the ingestion of Harness CI Build images into a customer maintained Container Registry.  This template will build and deliver the following:
 
 - An optional new Harness Organization
 - An optional new Harness Project in the chosen Organization
