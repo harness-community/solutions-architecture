@@ -4,6 +4,8 @@ A collection of Terraform resources centered around the implementation of the Ha
 
 ## TLDR
 
+_Note: The use of this module requires that the calling template also includes a Harness Terraform Provider configuration.  Learn [How to setup the Harness Terraform Provider](#providers)_
+
 ```terraform
 module "harness-ci-factory" {
   source = "git@github.com:harness-community/solutions-architecture.git//harness-ci-factory?ref=main"
