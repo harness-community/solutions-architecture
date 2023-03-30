@@ -1,0 +1,103 @@
+# Gather and Collate available and in-use Harness CI Image details
+spec:
+  type: Custom
+  tags: {}
+  spec:
+    execution:
+      steps:
+        - step:
+            name: Gather Current Custom Images
+            identifier: gather_current_custom_images
+            type: Http
+            spec:
+              url: ${HARNESS_URL}/ci/execution-config/get-customer-config?accountIdentifier=<+account.identifier>&infra=k8&overridesOnly=true
+              method: GET
+              assertion: <+httpResponseCode> == 200
+              headers:
+                - key: X-API-KEY
+                  value: <+secrets.getValue("${HARNESS_API_KEY_SECRET}")>
+              outputVariables:
+                - name: agents
+                  type: String
+                  value: <+json.list("data", json.format(json.object(httpResponseBody)))>
+            timeout: 10s
+        - step:
+            name: Download Harness Image List
+            identifier: download_harness_image_list
+            type: Http
+            spec:
+              url: ${HARNESS_URL}/ci/execution-config/get-default-config?accountIdentifier=<+account.identifier>&infra=k8
+              method: GET
+              assertion: <+httpResponseCode> == 200
+              headers:
+                - key: X-API-KEY
+                  value: <+secrets.getValue("${HARNESS_API_KEY_SECRET}")>
+              outputVariables:
+                - name: agents
+                  type: String
+                  value: <+json.list("data", json.format(json.object(httpResponseBody)))>
+            timeout: 10s
+        - step:
+            name: Get List of Images to Update
+            identifier: get_list_of_images_to_update
+            type: ShellScript
+            spec:
+              shell: Bash
+              onDelegate: true
+              source:
+                type: Inline
+                spec:
+                  script: |-
+                    set -eo pipefail
+                    echo "Begin Processing List of images"
+
+                    function parse_list () {
+                        local list=$1
+                        local new_list=($(echo $list | sed -r 's/[\{|\}]//g' | sed -r 's/ //g' | sed -r "s/$${REGISTRY}\///g" | tr "," "\n"))
+                        echo "$${new_list[@]}"
+                    }
+
+                    DEFAULT_IMAGES=$(parse_list "$DEFAULT_IMAGES")
+                    CUSTOMER_IMAGES=$(parse_list "$CUSTOMER_IMAGES")
+                    new_image_list=()
+
+                    echo "Determine changed images"
+                    for image in $DEFAULT_IMAGES
+                    do
+                        image=$(echo $image | sed -r "s/$${REGISTRY}\///")
+                        # We want a valid image for some run step work and the best choice will be
+                        # the current CI addonTag image as it will always be pulled and should be current.
+                        if [[ -n `echo "$${image}" | grep addonTag` ]]; then
+                          RUNNER_IMAGE="`echo $${image} | cut -d"=" -f2`"
+                        fi
+
+                        # Check the image against the current customer image list to verify if the
+                        # image should be built
+                        if [[ ! "$${CUSTOMER_IMAGES[*]}" =~ "$${image}" ]]; then
+                            echo "- $${image} is different"
+                            new_image_list+=($image)
+                        fi
+                    done
+
+                    echo "Generate Output"
+                    new_image_list="$${new_image_list[*]}"
+                    FINAL_IMAGE_LIST=$${new_image_list// /,}
+
+              environmentVariables:
+                - name: CUSTOMER_IMAGES
+                  type: String
+                  value: <+stage.spec.execution.steps.gather_current_custom_images.output.outputVariables.agents>
+                - name: DEFAULT_IMAGES
+                  type: String
+                  value: <+stage.spec.execution.steps.download_harness_image_list.output.outputVariables.agents>
+                - name: REGISTRY
+                  type: String
+                  value: <+pipeline.variables.registry>
+              outputVariables:
+                - name: images
+                  type: String
+                  value: FINAL_IMAGE_LIST
+                - name: runner
+                  type: String
+                  value: RUNNER_IMAGE
+            timeout: 5m
