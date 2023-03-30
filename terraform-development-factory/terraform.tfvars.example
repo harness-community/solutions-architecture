@@ -1,12 +1,3 @@
-# [Optional] Enter the Harness Platform URL.  Defaults to Harness SaaS URL
-harness_platform_url = "https://app.harness.io/gateway"
-
-# [Required] Enter the Harness Platform Account Number
-harness_platform_account = # Required
-
-# [Required] Enter the Harness Platform API Key for your account
-harness_platform_key = # Required
-
 # [Required] Provide an organization name.  Must be two or more characters
 organization_name = # Required
 
