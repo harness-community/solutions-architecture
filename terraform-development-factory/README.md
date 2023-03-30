@@ -6,6 +6,8 @@ The goal of this example will show how to create multiple Harness Pipelines base
 
 ## TLDR
 
+_Note: The use of this module requires that the calling template also includes a Harness Terraform Provider configuration.  Learn [How to setup the Harness Terraform Provider](#providers)_
+
 ```terraform
 module "terraform-development-factory" {
   source = "git@github.com:harness-community/solutions-architecture.git//terraform-development-factory?ref=main"
