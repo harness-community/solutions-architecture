@@ -1,4 +1,4 @@
 variable "account_id" {
-  type = string
+  type    = string
   default = "Ompd5rAMSfq97LoZsErwnQ"
 }
