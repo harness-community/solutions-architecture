@@ -42,16 +42,16 @@ resource "harness_platform_usergroup" "sa_admins" {
   name       = "sa_admins"
 
   user_emails = [
-    "bogdan.catana@harness.io",
+    "loren.yeung@harness.io",
     "brad.thomas@harness.io",
-    "charles.crow@harness.io",
-    "christopher.suran@harness.io",
     "emerson.hardisty@harness.io",
     "jayaraman.alagarsamy@harness.io",
-    "loren.yeung@harness.io",
     "martin.ansong@harness.io",
     "riley.snyder@harness.io",
     "taylor.shain@harness.io",
+    "bogdan.catana@harness.io",
+    "charles.crow@harness.io",
+    "christopher.suran@harness.io",
     "jeremy.goodrum@harness.io"
   ]
 }
