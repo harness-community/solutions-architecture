@@ -68,8 +68,8 @@ module "delegate" {
   ]
   subnets = module.vpc.private_subnets
 
-  manager_host_and_port = "https://app.harness.io"
-
+  manager_host_and_port     = "https://app.harness.io"
+  log_streaming_service_url = "https://app.harness.io/log-service/"
 }
 
 data "aws_iam_policy_document" "delegate-assumed" {

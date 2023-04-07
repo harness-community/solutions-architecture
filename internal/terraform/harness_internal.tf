@@ -4,8 +4,6 @@ resource "harness_platform_project" "internal" {
   org_id     = data.harness_platform_organization.default.id
 }
 
-###
-
 resource "harness_platform_connector_github" "harness_community" {
   identifier = "harness_community"
   name       = "harness_community"
@@ -13,7 +11,7 @@ resource "harness_platform_connector_github" "harness_community" {
   org_id     = data.harness_platform_organization.default.id
   project_id = harness_platform_project.internal.id
 
-  url             = "https://github.com/harness_community"
+  url             = "https://github.com/harness-community"
   connection_type = "Account"
   validation_repo = "solutions-architecture"
 
