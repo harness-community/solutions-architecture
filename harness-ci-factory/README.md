@@ -30,6 +30,8 @@ After pulling, building, and pushing the images to your registry you will need t
 
 ![image](https://user-images.githubusercontent.com/7338312/228593992-c5ad744b-ee5d-4dd2-b68a-0fdf968c90d6.png)
 
+If you do not want to edit this default connector, you can optionally set `modify_default_image_config` to false. Then in your CI stage under `infrastructure`>`advanced`>`override image connector` you would select the image connector where you saved the Harness images (`container_registry_connector_ref`).
+
 ## Summary
 
 As the Harness Solutions Architecture team, we have developed a pipeline to manage the ingestion of Harness CI Build images into a customer maintained Container Registry.  This template will build and deliver the following:
@@ -133,6 +135,7 @@ _Note: When providing `_ref` values, please ensure that these are prefixed with 
 | max_build_concurrency |  number of simultaneous builds to perform | string | 5 | X |
 | enable_schedule | Should we enable the execution of this pipeline to run on a schedule? | bool | true | |
 | schedule | Cron Format schedule for when and how frequently to schedule this pipeline | string | "0 2 * * *" | |
+| modify_default_image_config | Update the Harness Platform to use the newly pushed images as the default versions when running CI pipelines. (requires modification of the harnessImages docker connector) | bool | true | |
 
 
 ## Terraform TFVARS

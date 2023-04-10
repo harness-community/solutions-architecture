@@ -82,6 +82,7 @@ module "harness-ci-image-factory" {
       CONTAINER_REGISTRY_CONNECTOR : var.container_registry_connector_ref
       KUBERNETES_CONNECTOR_REF : var.kubernetes_connector_ref
       KUBERNETES_NAMESPACE : var.kubernetes_namespace
+      MODIFY_DEFAULT : tostring(var.modify_default_image_config)
     }
   )
   tags = {
