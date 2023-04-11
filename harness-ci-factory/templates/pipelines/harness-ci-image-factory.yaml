@@ -65,7 +65,7 @@ stages:
           maxConcurrency: ${MAX_CONCURRENCY}
       when:
         pipelineStatus: Success
-        condition: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != ""
+        condition: (<+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != "") && <+pipeline.variables.modify_default>
   - stage:
       name: Pause to recheck status
       identifier: pause_to_recheck_status
@@ -136,4 +136,8 @@ variables:
     type: String
     value: <+input>.allowedValues(true,false)
     default: "false"
-
+  - name: modify_default
+    description: Update the Harness Platform to use the newly pushed images.
+    type: String
+    value: <+input>.allowedValues(true,false)
+    default: "${MODIFY_DEFAULT}"
