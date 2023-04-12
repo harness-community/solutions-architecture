@@ -14,6 +14,12 @@ variable "project_name" {
   description = "[Required] Provide an project name.  Must be two or more characters"
 }
 
+variable "create_project" {
+  type        = bool
+  description = "[Optional] Should this execution create a new project"
+  default     = false
+}
+
 variable "repositories" {
   type        = list(string)
   description = "[Required] List of Repositories for which to configure and create pipelines"

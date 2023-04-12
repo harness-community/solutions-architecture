@@ -1,5 +1,6 @@
 module "org_foo" {
-  source = "git@github.com:harness-community/terraform-harness-structure.git//modules/organizations?ref=feature/dynamic-lookup-support"
+  source  = "harness-community/structure/harness//modules/organizations"
+  version = "0.1.3"
 
   name        = "Foo"
   description = "resources for buissness unit Foo"
@@ -12,7 +13,8 @@ module "org_foo" {
 }
 
 module "project_appX" {
-  source = "git@github.com:harness-community/terraform-harness-structure.git//modules/projects?ref=feature/dynamic-lookup-support"
+  source  = "harness-community/structure/harness//modules/projects"
+  version = "0.1.3"
 
   organization_id = module.org_foo.organization_details.id
   name            = "appX"
@@ -28,7 +30,8 @@ module "project_appX" {
 }
 
 module "variable_appX_cost_center" {
-  source = "git@github.com:harness-community/terraform-harness-structure.git//modules/variables?ref=feature/dynamic-lookup-support"
+  source  = "harness-community/structure/harness//modules/variables"
+  version = "0.1.3"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id
@@ -45,7 +48,8 @@ module "variable_appX_cost_center" {
 }
 
 module "secret_appX_dockerhub" {
-  source = "git@github.com:harness-community/terraform-harness-structure.git//modules/secrets/text?ref=feature/dynamic-lookup-support"
+  source  = "harness-community/structure/harness//modules/secrets/text"
+  version = "0.1.3"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id
@@ -62,7 +66,8 @@ module "secret_appX_dockerhub" {
 }
 
 module "secret_appX_dockerhub_cert" {
-  source = "git@github.com:harness-community/terraform-harness-structure.git//modules/secrets/file?ref=feature/dynamic-lookup-support"
+  source  = "harness-community/structure/harness//modules/secrets/file"
+  version = "0.1.3"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id
