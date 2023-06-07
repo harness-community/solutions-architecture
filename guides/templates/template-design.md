@@ -156,27 +156,38 @@ When using a template, you have the options to either **Use Template** or **Copy
 
 Choosing the **Use Template** option means that you are creating a *reference* to the template. In this case, any updates made to the template will automatically reflect for all who are using it. For instance, if you have created a stage template for CI and later decide to add an image scanning step, this can be incorporated directly into the template. Consequently, everyone referencing this template will have the new step included in their configuration automatically. For more details about how updates are managed, refer to the [versioning](#versioning) section.
 
-On the other hand, the **Copy Template** option can be useful when you wish to provide a starting point but want to allow complete flexibility over the configuration. This approach can be beneficial in certain situations but should be used with caution, as it can lead to configuration sprawl.
+On the other hand, the **Copy Template** option can be useful when you wish to provide a starting point but want to allow complete flexibility over the configuration. This approach can be beneficial in certain situations but should be used with caution, as it can lead to configuration sprawl.  A common use case where this can be helpful, but also still provide some amount of centralized control, is for a pipeline template made up of stage templates.  The pipeline template can be used like a "stamp" to provide a starting point, but the actual release process inside can be modified for organizations where this may vary across teams.
 
 As a general rule, start with the **Use Template** option and only opt for **Copy Template** when absolutely necessary. This ensures that updates to the template benefit all users and helps prevent unnecessary divergence in configuration.
 
 
 ## Failure strategies and other advanced configurations
 
-When possible, it's best to mark all the fields as `<+input>` to ensure the greatest amount of flexibility by the consumer.
+When possible, it's best to mark all the fields as `<+input>` to ensure the greatest amount of flexibility by the consumer.  If these fields are not exteranlized as inputs to the template, then end users of the template are not able to modify them.
 
 
 ## Versioning
 
 Proper versioning of templates is an important part of maintaining a stable and efficient CI/CD process. It facilitates the gradual rollout of template changes, thus enabling users to test and adapt to new versions in non-critical environments before fully deploying them in production. This strategy effectively mitigates risks associated with introducing new template versions.
 
+[Semantic versioning](https://semver.org/) is the preferred nomoenclature for how to version templates.  Where the Major version can indicate breaking changes, the minor version indicates small changes to functionality which are backwards compatible, and the patch version indicates bug fixes.  This is represented as `major.minor.patch` such as `1.0.0`.
+
 ### Pinning to Stable Version
 
 When utilizing a pipeline as a reference, you're given the choice to either select a specific version or opt for `Always use the stable version`. By selecting the latter, your pipeline is always kept up-to-date. Whenever a new version is released and marked as `stable`, your pipeline will automatically adopt any updates made in this revised template. This feature streamlines the integration of improvements and new features, eliminating the need for manual intervention to update the templates. Nonetheless, it's important to thoroughly test each new version in a non-production environment to ensure stability and compatibility with your pipeline's configuration.
-
 
 ### Testing Changes
 
 Before implementing any modifications, it's prudent to create a new version of your template. This practice safeguards your existing version from inadvertent overwrites.
 
 After saving your modifications to the new version, you can then create a pipeline that utilizes your template to test out the new functionality. Once you're satisfied with the changes, consumers of your template can update the version they're referencing to incorporate the changes. You also have the option to `Set as Stable` for your new version. As a result, any consumer [using the stable version](#pinning-to-stable-version) will automatically receive the updates.
+
+### Releasing Breaking Changes to Templates
+
+Updates made to templates that can be considered breaking changes, such as modifying the input interface to a template or changes in behavior that require the template consumers to adjust to should be released as a new major version. These types of template updates should be released under a new major version, so a current template version of `1.0.0` modified in this way should get a version of `2.0.0`.  If the stable tag is used on the template and template consumers to automtacally push updates, then `Stable` should not be updated to the latest major version until consumers of the tag are made aware and can adjust to the changes.
+
+The use of default values in inputs can often be used to turn what would be a breaking change into a backwards compatible one.  So when changing the input interface your template expects, all effort should be made to find a default value for that input that can preserve the current behavior.  For example, take a template that works on all files in a directory, but there is a need to add a filter parameter which can make it operate on a subset of files.  Choosing a default value of `**/*` can make the template work as-is for current users, while allowing someone to modify that filter and narrow down the scope to a subset of the files.
+
+## Conclusion
+
+Templates are a powerful way to standardize processes, centralize common tasks to avoid code duplication and maximize reuse and help end users get started quickly.  Applying the concepts above allows for maximum reuse, while minimizing the disruption to template consumers during update.
