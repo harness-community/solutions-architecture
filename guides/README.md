@@ -1,3 +1,3 @@
 # Solution Architecture Guides
 
-- [Template Design](./template-design.md)
+- [Template Design](./templates/template-design.md)
