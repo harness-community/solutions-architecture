@@ -86,6 +86,7 @@ module "push_triggers" {
         var.harness_api_key_secret
       )
       REPOSITORY : each.value
+      DEFAULT_REPO_BRANCH : var.default_repo_branch
       PIPELINE_ID : module.pipelines[each.value].details.id
       GITHUB_CONNECTOR : (
         var.github_connector_location != "project"

@@ -54,6 +54,7 @@ module "build-push-template" {
       CONTAINER_REGISTRY_CONNECTOR : var.container_registry_connector_ref
       KUBERNETES_CONNECTOR_REF : var.kubernetes_connector_ref
       KUBERNETES_NAMESPACE : var.kubernetes_namespace
+      HARNESS_IMAGE_CONNECTOR : var.external_image_connector_ref
     }
   )
   tags = {

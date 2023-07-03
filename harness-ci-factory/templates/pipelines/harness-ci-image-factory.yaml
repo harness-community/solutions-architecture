@@ -5,26 +5,47 @@ stages:
       description: Reads official Harness API to gather a list of the Harness Images used for pipeline execution
       template:
         templateRef: ${GATHER_SCAN_TEMPLATE}
+        templateInputs:
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    identifier: get_list_of_images_to_update
+                    type: ShellScript
+                    spec:
+                      environmentVariables:
+                        - name: REGISTRY
+                          type: String
+                          value: <+pipeline.variables.registry>
   - stage:
       name: Build and Push Images
       identifier: build_and_push_images
       description: ""
       template:
         templateRef: ${BUILD_PUSH_TEMPLATE}
+        templateInputs:
+          type: CI
+          variables:
+            - name: REGISTRY
+              type: String
+              value: <+pipeline.variables.registry>
+            - name: IMAGE
+              type: String
+              value: <+repeat.item.split("=")[1]>
+            - name: IMAGE_NAME
+              type: String
+              value: <+repeat.item.split("=")[1].split(":")[0]>
+            - name: IMAGE_VERSION
+              type: String
+              value: <+repeat.item.split("=")[1].split(":")[1]>
+            - name: RUN_STEP_RUNNER
+              type: String
+              value: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.runner>
       strategy:
         repeat:
           items: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images.split(",")>
           maxConcurrency: ${MAX_CONCURRENCY}
-      variables:
-        - name: IMAGE_NAME
-          type: String
-          value: <+repeat.item.split("=")[1].split(":")[0]>
-        - name: IMAGE_VERSION
-          type: String
-          value: <+repeat.item.split("=")[1].split(":")[1]>
-        - name: IMAGE
-          type: String
-          value: <+repeat.item.split("=")[1]>
       when:
         pipelineStatus: Success
         condition: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != ""
@@ -54,7 +75,7 @@ stages:
                     [
                         {
                             "field": "<+repeat.item.split("=")[0]>",
-                            "value": "<+pipeline.variables.registry>/<+repeat.item.split("=")[1]>"
+                            "value": "<+repeat.item.split("=")[1]>"
                         }
                     ]
                 timeout: 30s
@@ -81,12 +102,31 @@ stages:
                 spec:
                   duration: 30s
       tags: {}
+      when:
+        pipelineStatus: Success
+        condition: (<+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != "") && <+pipeline.variables.modify_default>
   - stage:
       name: Verify Harness Images
       identifier: verify_harness_images
       description: Reads official Harness API to gather a list of the Harness Images used for pipeline execution
       template:
         templateRef: ${GATHER_SCAN_TEMPLATE}
+        templateInputs:
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    identifier: get_list_of_images_to_update
+                    type: ShellScript
+                    spec:
+                      environmentVariables:
+                        - name: REGISTRY
+                          type: String
+                          value: <+pipeline.variables.registry>
+      when:
+        pipelineStatus: Success
+        condition: (<+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != "") && <+pipeline.variables.modify_default>
   - stage:
       name: Build Missing Images
       identifier: build_missing_images
@@ -123,7 +163,7 @@ stages:
                   condition: "!<+pipeline.variables.is_retry>"
       tags: {}
       when:
-        condition: <+pipeline.stages.verify_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != ""
+        condition: (<+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != "") && (<+pipeline.stages.verify_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images> != "")
         pipelineStatus: Success
 variables:
   - name: registry

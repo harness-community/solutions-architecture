@@ -101,7 +101,14 @@ variable "github_secret_location" {
         EOF
   }
 }
+
 variable "github_secret_id" {
   type        = string
   description = "[Required] Name of the GitHub secret to use"
+}
+
+variable "default_repo_branch" {
+  type        = string
+  description = "[Optional] Name of the default branch to which validation will be performed for Push Triggers"
+  default     = "main"
 }
