@@ -180,7 +180,7 @@ Releasing a new version of a template that requires a change to the inputs the t
 
 ## Branching
 
-An alternative to using versioning, is to track template changes in different branches in git using the [Git Experience](https://developer.harness.io/docs/platform/git-experience/git-experience-overview/).  A new version of a template should be released under a new branch for testing, and then merged down to the branch the template is configured to track (`main` or `master` preferred, but might be something like `harness`).  Pipelines can be changed to use the tempalate from this branch, or a new pipeline can be created from the template that targets this branch.
+An alternative to using versioning, is to track template changes in different branches in git using the [Git Experience](https://developer.harness.io/docs/platform/git-experience/git-experience-overview/).  A new version of a template should be released under a new branch for testing, and then merged down to the branch the template is configured to track (`main` or `master` preferred, but might be something like `harness`).  Pipelines can be changed to use the template from this branch, or a new pipeline can be created from the template that targets this branch.  When using branches for versioning, it's best to avoid also using the built in versioning.  So something like `from-branch` or `latest` should be used in the version field when using this technique.
 
 Just like with versioning using the `stable` tag, breaking changes like adding extra inputs should not be released without following the process described [below](#releasing-breaking-changes-to-templates).
 
