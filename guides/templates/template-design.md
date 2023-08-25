@@ -198,11 +198,11 @@ Updates made to templates that can be considered breaking changes, such as modif
 
 Breaking template updates for templates using versioning should be released under a new major version.  So a current template version of `1.0.0` modified in this way should get a version of `2.0.0`.  
 
-If the stable tag is used on the template and template consumers to automtacally push updates, then `Stable` should not be updated to the latest major version until consumers of the tag are made aware and can adjust to the changes.  This can be done by having users modify their pipelines to use the new major version instead of `stable`, updating the inputs the new version requires, and then testing the changes.  Once all the pipelines using the template have been updated and tested, the new version can be marked `stable`, and pipliens built from the template can move back to tracking `stable`.
+If the stable tag is used on the template and template consumers to automatically push updates, then `Stable` should not be updated to the latest major version until consumers of the tag are made aware and can adjust to the changes.  This can be done by having users modify their pipelines to use the new major version instead of `stable`, updating the inputs the new version requires, and then testing the changes.  Once all the pipelines using the template have been updated and tested, the new version can be marked `stable`, and pipelines built from the template can move back to tracking `stable`.
 
 ### Using Branching
 
-Breaking changes made to templates using branching should be created on a new branch.  Pipelines that are built from this template should be updated to use the template from this new branch, adjust the inputs as required, and then test their pipeline using the latest version.  Once all pipelines have been modfied to use this new branch, this branch can be merged down to the branch the template is configured to track, and teams should modify their pipelines to track this branch once again.
+Breaking changes made to templates using branching should be created on a new branch.  Pipelines that are built from this template should be updated to use the template from this new branch, adjust the inputs as required, and then test their pipeline using the latest version.  Once all pipelines have been modified to use this new branch, this branch can be merged down to the branch the template is configured to track, and teams should modify their pipelines to track this branch once again.
 
 ### Use Default Values to minimize impact
 
