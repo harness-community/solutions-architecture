@@ -176,15 +176,35 @@ Proper versioning of templates is an important part of maintaining a stable and 
 
 When utilizing a pipeline as a reference, you're given the choice to either select a specific version or opt for `Always use the stable version`. By selecting the latter, your pipeline is always kept up-to-date. Whenever a new version is released and marked as `stable`, your pipeline will automatically adopt any updates made in this revised template. This feature streamlines the integration of improvements and new features, eliminating the need for manual intervention to update the templates. Nonetheless, it's important to thoroughly test each new version in a non-production environment to ensure stability and compatibility with your pipeline's configuration.
 
-### Testing Changes
+Releasing a new version of a template that requires a change to the inputs the template requires should not be done by directly updating the stable version.  A release process for these kind of changes is described [below](#releasing-breaking-changes-to-templates).
+
+## Branching
+
+An alternative to using versioning, is to track template changes in different branches in git using the [Git Experience](https://developer.harness.io/docs/platform/git-experience/git-experience-overview/).  A new version of a template should be released under a new branch for testing, and then merged down to the branch the template is configured to track (`main` or `master` preferred, but might be something like `harness`).  Pipelines can be changed to use the template from this branch, or a new pipeline can be created from the template that targets this branch.  When using branches for versioning, it's best to avoid also using the built in versioning.  So something like `from-branch` or `latest` should be used in the version field when using this technique.
+
+Just like with versioning using the `stable` tag, breaking changes like adding extra inputs should not be released without following the process described [below](#releasing-breaking-changes-to-templates).
+
+## Testing Changes
 
 Before implementing any modifications, it's prudent to create a new version of your template. This practice safeguards your existing version from inadvertent overwrites.
 
-After saving your modifications to the new version, you can then create a pipeline that utilizes your template to test out the new functionality. Once you're satisfied with the changes, consumers of your template can update the version they're referencing to incorporate the changes. You also have the option to `Set as Stable` for your new version. As a result, any consumer [using the stable version](#pinning-to-stable-version) will automatically receive the updates.
+After saving your modifications to the new version, you can then create a pipeline that utilizes your template to test out the new functionality. Once you're satisfied with the changes, consumers of your template can update the version or branch they're referencing to incorporate the changes. You also have the option to `Set as Stable` for your new version. As a result, any consumer [using the stable version](#pinning-to-stable-version) will automatically receive the updates.
 
-### Releasing Breaking Changes to Templates
+## Releasing Breaking Changes to Templates
 
-Updates made to templates that can be considered breaking changes, such as modifying the input interface to a template or changes in behavior that require the template consumers to adjust to should be released as a new major version. These types of template updates should be released under a new major version, so a current template version of `1.0.0` modified in this way should get a version of `2.0.0`.  If the stable tag is used on the template and template consumers to automtacally push updates, then `Stable` should not be updated to the latest major version until consumers of the tag are made aware and can adjust to the changes.
+Updates made to templates that can be considered breaking changes, such as modifying the input interface to a template or changes in behavior that require the template consumers to adjust to, should be released in a metered way.  That way this change does not immediately impact all pipelines that are consuming the template.  The actual technique varies whether you're using versioning or branching, and both are described below.
+
+### Using Versioning
+
+Breaking template updates for templates using versioning should be released under a new major version.  So a current template version of `1.0.0` modified in this way should get a version of `2.0.0`.  
+
+If the stable tag is used on the template and template consumers to automatically push updates, then `Stable` should not be updated to the latest major version until consumers of the tag are made aware and can adjust to the changes.  This can be done by having users modify their pipelines to use the new major version instead of `stable`, updating the inputs the new version requires, and then testing the changes.  Once all the pipelines using the template have been updated and tested, the new version can be marked `stable`, and pipelines built from the template can move back to tracking `stable`.
+
+### Using Branching
+
+Breaking changes made to templates using branching should be created on a new branch.  Pipelines that are built from this template should be updated to use the template from this new branch, adjust the inputs as required, and then test their pipeline using the latest version.  Once all pipelines have been modified to use this new branch, this branch can be merged down to the branch the template is configured to track, and teams should modify their pipelines to track this branch once again.
+
+### Use Default Values to minimize impact
 
 The use of default values in inputs can often be used to turn what would be a breaking change into a backwards compatible one.  So when changing the input interface your template expects, all effort should be made to find a default value for that input that can preserve the current behavior.  For example, take a template that works on all files in a directory, but there is a need to add a filter parameter which can make it operate on a subset of files.  Choosing a default value of `**/*` can make the template work as-is for current users, while allowing someone to modify that filter and narrow down the scope to a subset of the files.
 
