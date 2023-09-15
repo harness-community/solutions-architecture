@@ -3,6 +3,10 @@ resource "harness_platform_organization" "Harness_Community" {
   name        = "Harness Community"
   description = "For examples that live in the Harness-Community Github repo."
   tags        = ["managed:terraform"]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "harness_platform_project" "utilities" {
@@ -10,6 +14,10 @@ resource "harness_platform_project" "utilities" {
   name       = "utilities"
   org_id     = harness_platform_organization.Harness_Community.id
   tags       = ["managed:terraform"]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "harness_platform_project" "setup" {
@@ -17,6 +25,10 @@ resource "harness_platform_project" "setup" {
   name       = "setup"
   org_id     = harness_platform_organization.Harness_Community.id
   tags       = ["managed:terraform"]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "harness_platform_project" "examples" {
@@ -24,6 +36,10 @@ resource "harness_platform_project" "examples" {
   name       = "examples"
   org_id     = harness_platform_organization.Harness_Community.id
   tags       = ["managed:terraform"]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 
@@ -36,6 +52,8 @@ resource "harness_platform_connector_github" "harness_community_github" {
   url             = "https://github.com/harness-community"
   connection_type = "Account"
   validation_repo = "solutions-architecture"
+
+  execute_on_delegate = false
 
   credentials {
     http {
@@ -50,6 +68,10 @@ resource "harness_platform_connector_github" "harness_community_github" {
       private_key_ref = "org.harness_solution_architecture_github_app_cert"
     }
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "harness_platform_connector_docker" "harness_community_dockerhub" {
@@ -61,8 +83,14 @@ resource "harness_platform_connector_docker" "harness_community_dockerhub" {
   type = "DockerHub"
   url  = "https://index.docker.io/v2/"
 
+  execute_on_delegate = false
+
   credentials {
     username     = "harnesscommunity"
     password_ref = "org.harnesscommunity_dockerhub"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
