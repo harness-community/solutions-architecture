@@ -34,7 +34,6 @@ resource "harness_platform_usergroup" "sa_admins" {
   user_emails = [
     "loren.yeung@harness.io",
     "brad.thomas@harness.io",
-    "emerson.hardisty@harness.io",
     "jayaraman.alagarsamy@harness.io",
     "martin.ansong@harness.io",
     "riley.snyder@harness.io",
@@ -45,7 +44,11 @@ resource "harness_platform_usergroup" "sa_admins" {
     "mani.m@harness.io",
     "jeremiah.lamborn@harness.io",
     "pranam@harness.io",
-    "matthew.moran@harness.io"
+    "matthew.moran@harness.io",
+    "apoorv.harsh@harness.io",
+    "ken@harness.io",
+    "venkat.padmanabhan@harness.io",
+    "raj.baghel@harness.io",
   ]
 }
 
