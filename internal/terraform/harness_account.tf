@@ -40,9 +40,12 @@ resource "harness_platform_usergroup" "sa_admins" {
     "riley.snyder@harness.io",
     "taylor.shain@harness.io",
     "bogdan.catana@harness.io",
-    "charles.crow@harness.io",
     "christopher.suran@harness.io",
-    "jeremy.goodrum@harness.io"
+    "jeremy.goodrum@harness.io",
+    "mani.m@harness.io",
+    "jeremiah.lamborn@harness.io",
+    "pranam@harness.io",
+    "matthew.moran@harness.io"
   ]
 }
 
