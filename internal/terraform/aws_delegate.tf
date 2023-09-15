@@ -61,7 +61,6 @@ module "delegate" {
   delegate_token_secret_arn = "arn:aws:secretsmanager:us-west-2:759984737373:secret:sa/account_delegate-NtqV5G"
   delegate_policy_arns = [
     aws_iam_policy.delegate_aws_access.arn,
-    # "arn:aws:iam::aws:policy/AdministratorAccess" # should remove once we craft policies
   ]
   security_groups = [
     module.vpc.default_security_group_id
@@ -94,4 +93,16 @@ resource "aws_iam_role" "delegate-assumed" {
 resource "aws_iam_role_policy_attachment" "delegate-assumed-AdministratorAccess" {
   role       = aws_iam_role.delegate-assumed.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
+resource "harness_platform_variables" "sales-delegate-assumed-role-arn" {
+  identifier  = "sales_delegate_assumed_role_arn"
+  name        = "sales_delegate_assumed_role_arn"
+  description = "an aws role that our ecs delegate can assume for admin access"
+  type        = "String"
+
+  spec {
+    value_type  = "FIXED"
+    fixed_value = aws_iam_role.delegate-assumed.arn
+  }
 }

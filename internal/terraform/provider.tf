@@ -9,11 +9,11 @@ terraform {
       version = "0.14.11"
     }
   }
-  backend "s3" {
-    bucket = "harness-solutions-architecture"
-    key    = "terraform/internal"
-    region = "us-west-2"
-  }
+  # backend "s3" {
+  #   bucket = "harness-solutions-architecture"
+  #   key    = "terraform/internal"
+  #   region = "us-west-2"
+  # }
 }
 
 provider "aws" {
