@@ -5,4 +5,8 @@ resource "harness_platform_organization" "SA-Sandbox" {
   tags = [
     "sandbox"
   ]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }

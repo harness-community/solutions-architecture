@@ -5,4 +5,8 @@ resource "harness_platform_organization" "SA-Demo" {
   tags = [
     "demo"
   ]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
