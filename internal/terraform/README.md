@@ -2,6 +2,8 @@
 
 terraform for provisioning the SA Harness account and cloud resources
 
+[See the pipeline here for updates](https://app.harness.io/ng/account/Ompd5rAMSfq97LoZsErwnQ/ci/orgs/Harness_Community/projects/setup/pipelines/solutionsarchitecture_infra/pipeline-studio/?storeType=INLINE)
+
 ## aws
 
 ### vpc
