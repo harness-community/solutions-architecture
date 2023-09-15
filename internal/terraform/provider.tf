@@ -6,7 +6,7 @@ terraform {
     }
     harness = {
       source  = "harness/harness"
-      version = "0.14.11"
+      version = "0.27.2"
     }
   }
   # backend "s3" {
