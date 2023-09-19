@@ -110,8 +110,8 @@ resource "harness_platform_connector_azure_cloud_cost" "sales_azure_cost" {
   billing_export_spec {
     storage_account_name = azurerm_storage_account.solutions-architecture.name
     container_name       = "ccm"
-    directory_name       = "reports"
-    report_name          = "harness-solution-architects"
+    directory_name       = "export"
+    report_name          = "solutions-architecture"
     subscription_id      = data.azurerm_subscription.current.id
   }
 }
