@@ -60,5 +60,3 @@ data "aws_ecs_cluster" "solutions-architecture" {
 ```
 
 ## foobar
-
-commit here for PR plan runs
