@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "solutions-architecture" {
-  bucket = "solutions-architecture"
+  bucket = "harness-solutions-architecture"
 
   tags = {
     Owner = "sa@harness.io"
