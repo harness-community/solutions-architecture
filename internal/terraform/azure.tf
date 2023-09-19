@@ -23,20 +23,22 @@ resource "azurerm_storage_container" "ccm" {
   container_access_type = "private"
 }
 
-resource "azurerm_role_assignment" "solutions-architecture-ccm" {
-  scope                = azurerm_storage_account.solutions-architecture.id
-  role_definition_name = "Storage Blob Data Reader"
-  principal_id         = local.harness_azure_application_id
-}
+# we do not have rbac permissions, but leaving here for example
 
-resource "azurerm_role_assignment" "solutions-architecture-reader" {
-  scope                = data.azurerm_subscription.current.id
-  role_definition_name = "Reader"
-  principal_id         = local.harness_azure_application_id
-}
+# resource "azurerm_role_assignment" "solutions-architecture-ccm" {
+#   scope                = azurerm_storage_account.solutions-architecture.id
+#   role_definition_name = "Storage Blob Data Reader"
+#   principal_id         = local.harness_azure_application_id
+# }
 
-resource "azurerm_role_assignment" "solutions-architecture-contributor" {
-  scope                = data.azurerm_subscription.current.id
-  role_definition_name = "Contributor"
-  principal_id         = local.harness_azure_application_id
-}
+# resource "azurerm_role_assignment" "solutions-architecture-reader" {
+#   scope                = data.azurerm_subscription.current.id
+#   role_definition_name = "Reader"
+#   principal_id         = local.harness_azure_application_id
+# }
+
+# resource "azurerm_role_assignment" "solutions-architecture-contributor" {
+#   scope                = data.azurerm_subscription.current.id
+#   role_definition_name = "Contributor"
+#   principal_id         = local.harness_azure_application_id
+# }
