@@ -22,17 +22,30 @@ resource "aws_s3_bucket_public_access_block" "this" {
 }
 
 
-resource "aws_cur_report_definition" "solutions-architecture" {
-  report_name                = "solutions-architecture"
-  time_unit                  = "HOURLY"
-  format                     = "textORcsv"
-  compression                = "GZIP"
-  additional_schema_elements = ["RESOURCES"]
-  s3_bucket                  = aws_s3_bucket.this.bucket
-  s3_region                  = aws_s3_bucket.this.region
-  s3_prefix                  = "ccm"
-  additional_artifacts       = []
-  report_versioning          = "OVERWRITE_REPORT"
+# resource "aws_cur_report_definition" "solutions-architecture" {
+#   report_name                = "solutions-architecture"
+#   time_unit                  = "HOURLY"
+#   format                     = "textORcsv"
+#   compression                = "GZIP"
+#   additional_schema_elements = ["RESOURCES"]
+#   s3_bucket                  = aws_s3_bucket.this.bucket
+#   s3_region                  = aws_s3_bucket.this.region
+#   s3_prefix                  = "ccm"
+#   additional_artifacts       = []
+#   report_versioning          = "OVERWRITE_REPORT"
+# }
+
+# data "aws_cur_report_definition" "solutions-architecture" {
+#   report_name = "solutions-architecture"
+# }
+
+# the resource for an aws cur seems to be broken, so lets create on in the console and pretend
+
+locals {
+  aws_cur_report_definition_name = "solutions-architecture"
+  #   aws_cur_report_definition_bucket = "solutions-architecture"
+  #   aws_cur_report_definition_region = "solutions-architecture"
+  aws_cur_report_definition_prefix = "ccm"
 }
 
 module "ccm" {
@@ -65,7 +78,7 @@ resource "harness_platform_connector_awscc" "sales_aws_cost" {
   name       = "sales_aws_cost"
 
   account_id  = "759984737373"
-  report_name = aws_cur_report_definition.solutions-architecture.report_name
+  report_name = local.aws_cur_report_definition_name
   s3_bucket   = aws_s3_bucket.this.bucket
 
   features_enabled = [
