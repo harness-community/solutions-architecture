@@ -77,7 +77,7 @@ resource "harness_platform_connector_awscc" "sales_aws_cost" {
   identifier = "sales_aws_cost"
   name       = "sales_aws_cost"
 
-  account_id  = "759984737373"
+  account_id  = data.aws_caller_identity.current.account_id
   report_name = local.aws_cur_report_definition_name
   s3_bucket   = aws_s3_bucket.this.bucket
 
@@ -97,8 +97,8 @@ resource "harness_platform_connector_azure_cloud_cost" "sales_azure_cost" {
   identifier = "sales_azure_cost"
   name       = "sales_azure_cost"
 
-  tenant_id       = "b229b2bb-5f33-4d22-bce0-730f6474e906"
-  subscription_id = "e8389fc5-0cb8-44ab-947b-c6cf62552be0"
+  tenant_id       = data.azurerm_subscription.current.tenant_id
+  subscription_id = data.azurerm_subscription.current.id
 
   features_enabled = [
     "BILLING",
@@ -108,10 +108,10 @@ resource "harness_platform_connector_azure_cloud_cost" "sales_azure_cost" {
 
   # using CCM setup from riley's personal Harness account
   billing_export_spec {
-    storage_account_name = "rileysnyderharnessio"
+    storage_account_name = azurerm_storage_account.solutions-architecture.name
     container_name       = "ccm"
-    directory_name       = "export"
-    report_name          = "rileysnyderharnessccm"
-    subscription_id      = "e8389fc5-0cb8-44ab-947b-c6cf62552be0"
+    directory_name       = "reports"
+    report_name          = "harness-solution-architects"
+    subscription_id      = data.azurerm_subscription.current.id
   }
 }
