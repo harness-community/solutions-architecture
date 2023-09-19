@@ -1,13 +1,9 @@
-resource "aws_s3_bucket" "solutions-architecture" {
+resource "aws_s3_bucket" "this" {
   bucket = "harness-solutions-architecture"
-
-  tags = {
-    Owner = "sa@harness.io"
-  }
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "solutions-architecture" {
-  bucket = aws_s3_bucket.solutions-architecture.bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  bucket = aws_s3_bucket.this.bucket
 
   rule {
     apply_server_side_encryption_by_default {
@@ -16,8 +12,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "solutions-archite
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "solutions-architecture" {
-  bucket = aws_s3_bucket.solutions-architecture.id
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket = aws_s3_bucket.this.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -32,8 +28,8 @@ resource "aws_cur_report_definition" "solutions-architecture" {
   format                     = "textORcsv"
   compression                = "GZIP"
   additional_schema_elements = ["RESOURCES"]
-  s3_bucket                  = aws_s3_bucket.solutions-architecture.bucket
-  s3_region                  = aws_s3_bucket.solutions-architecture.region
+  s3_bucket                  = aws_s3_bucket.this.bucket
+  s3_region                  = aws_s3_bucket.this.region
   s3_prefix                  = "ccm"
   additional_artifacts       = []
   report_versioning          = "OVERWRITE_REPORT"
@@ -43,7 +39,7 @@ module "ccm" {
   source  = "harness-community/harness-ccm/aws"
   version = "0.1.1"
 
-  s3_bucket_arn = aws_s3_bucket.solutions-architecture.arn
+  s3_bucket_arn = aws_s3_bucket.this.arn
   external_id   = "harness:891928451355:wlgELJ0TTre5aZhzpt8gVA"
   additional_external_ids = [
     "harness:891928451355:V2iSB2gRR_SxBs0Ov5vqCQ"
@@ -70,7 +66,7 @@ resource "harness_platform_connector_awscc" "sales_aws_cost" {
 
   account_id  = "759984737373"
   report_name = aws_cur_report_definition.solutions-architecture.report_name
-  s3_bucket   = aws_s3_bucket.solutions-architecture.bucket
+  s3_bucket   = aws_s3_bucket.this.bucket
 
   features_enabled = [
     "OPTIMIZATION",
