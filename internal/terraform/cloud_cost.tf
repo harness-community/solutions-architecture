@@ -106,7 +106,6 @@ resource "harness_platform_connector_azure_cloud_cost" "sales_azure_cost" {
     "OPTIMIZATION"
   ]
 
-  # using CCM setup from riley's personal Harness account
   billing_export_spec {
     storage_account_name = azurerm_storage_account.solutions-architecture.name
     container_name       = "ccm"
