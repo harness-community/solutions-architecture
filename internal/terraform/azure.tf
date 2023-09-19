@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "solutions-architecture" {
 }
 
 resource "azurerm_storage_account" "solutions-architecture" {
-  name                     = "solutions-architecture"
+  name                     = "solutionsarchitecture"
   resource_group_name      = azurerm_resource_group.solutions-architecture.name
   location                 = azurerm_resource_group.solutions-architecture.location
   account_tier             = "Standard"
