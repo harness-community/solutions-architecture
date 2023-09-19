@@ -31,25 +31,7 @@ resource "harness_platform_usergroup" "sa_admins" {
   identifier = "sa_admins"
   name       = "sa_admins"
 
-  user_emails = [
-    "loren.yeung@harness.io",
-    "brad.thomas@harness.io",
-    "jayaraman.alagarsamy@harness.io",
-    "martin.ansong@harness.io",
-    "riley.snyder@harness.io",
-    "taylor.shain@harness.io",
-    "bogdan.catana@harness.io",
-    "christopher.suran@harness.io",
-    "jeremy.goodrum@harness.io",
-    "mani.m@harness.io",
-    "jeremiah.lamborn@harness.io",
-    "pranam@harness.io",
-    "matthew.moran@harness.io",
-    "apoorv.harsh@harness.io",
-    "ken@harness.io",
-    "venkat.padmanabhan@harness.io",
-    "raj.baghel@harness.io",
-  ]
+  user_emails = split(",", var.admins)
 }
 
 resource "harness_platform_service_account" "internal" {
