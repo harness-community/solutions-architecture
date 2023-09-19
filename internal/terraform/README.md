@@ -1,6 +1,8 @@
 # internal SA resources
 
-terraform for provisioning the SA Harness account and cloud resources
+terraform for provisioning the SA Harness account and AWS resources
+
+[See the pipeline here for updates](https://app.harness.io/ng/account/Ompd5rAMSfq97LoZsErwnQ/ci/orgs/Harness_Community/projects/setup/pipelines/solutionsarchitecture_infra/pipeline-studio/?storeType=INLINE)
 
 ## aws
 
@@ -56,3 +58,5 @@ data "aws_ecs_cluster" "solutions-architecture" {
   cluster_name = "solutions-architecture"
 }
 ```
+
+## foobar

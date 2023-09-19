@@ -1,13 +1,3 @@
-resource "harness_platform_variables" "sales_aws_delegate_role" {
-  identifier = "sales_aws_delegate_role"
-  name       = "sales_aws_delegate_role"
-  type       = "String"
-  spec {
-    value_type  = "FIXED"
-    fixed_value = aws_iam_role.delegate-assumed.arn
-  }
-}
-
 resource "harness_platform_connector_kubernetes" "sa-cluster" {
   identifier = "sacluster"
   name       = "sa-cluster"
@@ -41,19 +31,7 @@ resource "harness_platform_usergroup" "sa_admins" {
   identifier = "sa_admins"
   name       = "sa_admins"
 
-  user_emails = [
-    "loren.yeung@harness.io",
-    "brad.thomas@harness.io",
-    "emerson.hardisty@harness.io",
-    "jayaraman.alagarsamy@harness.io",
-    "martin.ansong@harness.io",
-    "riley.snyder@harness.io",
-    "taylor.shain@harness.io",
-    "bogdan.catana@harness.io",
-    "charles.crow@harness.io",
-    "christopher.suran@harness.io",
-    "jeremy.goodrum@harness.io"
-  ]
+  user_emails = split(",", var.admins)
 }
 
 resource "harness_platform_service_account" "internal" {
