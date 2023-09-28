@@ -1,5 +1,10 @@
 # Overview
-This project aims to demonstrates with sample inputs on how to use dynamic blocks and modules to reuse Resource group to create resource with different permutation and combinations.
+This project aims to demonstrates with sample inputs on how to use dynamic blocks and modules to reuse Resource group to create resource with different permutation and combinations. Please replace sample inputs with valid ones before running the code.
+
+## Steps.
+- `terraform init` - initialises and downloads all the necessary dependencies.
+- `terraform plan` - Does a dry run and shows what's getting created/updated/deleted.
+- `terraform apply` - Applies the changes.
 
 ## Things to know:
 - [terraform](https://developer.hashicorp.com/terraform]/[opentofu][https://opentofu.org/docs/)
