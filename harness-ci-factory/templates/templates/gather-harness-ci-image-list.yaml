@@ -20,7 +20,7 @@ spec:
                 - name: agents
                   type: String
                   value: <+json.list("data", json.format(json.object(httpResponseBody)))>
-            timeout: 10s
+            timeout: 30s
         - step:
             name: Download Harness Image List
             identifier: download_harness_image_list
@@ -36,7 +36,7 @@ spec:
                 - name: agents
                   type: String
                   value: <+json.list("data", json.format(json.object(httpResponseBody)))>
-            timeout: 10s
+            timeout: 30s
         - step:
             name: Get List of Images to Update
             identifier: get_list_of_images_to_update
@@ -82,6 +82,8 @@ spec:
                     echo "Generate Output"
                     new_image_list="$${new_image_list[*]}"
                     FINAL_IMAGE_LIST=$${new_image_list// /,}
+                    DEFAULT_IMAGES=$${DEFAULT_IMAGES// /,}
+                    CUSTOMER_IMAGES=$${CUSTOMER_IMAGES// /,}
 
               environmentVariables:
                 - name: CUSTOMER_IMAGES
@@ -92,7 +94,7 @@ spec:
                   value: <+stage.spec.execution.steps.download_harness_image_list.output.outputVariables.agents>
                 - name: REGISTRY
                   type: String
-                  value: <+pipeline.variables.registry>
+                  value: <+input>
               outputVariables:
                 - name: images
                   type: String
@@ -100,4 +102,10 @@ spec:
                 - name: runner
                   type: String
                   value: RUNNER_IMAGE
+                - name: default_images
+                  type: String
+                  value: DEFAULT_IMAGES
+                - name: custom_images
+                  type: String
+                  value: CUSTOMER_IMAGES
             timeout: 5m
