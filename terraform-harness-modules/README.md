@@ -287,9 +287,9 @@ environment:
 
 ### [infrastructures](https://github.com/harness-community/terraform-harness-delivery/tree/main/modules/environments)
 
-Environments require an infrastructre definition to define where an application should be deployed. A given environment can have one to many infrastructe definitions of all different types.
+Environments require an infrastructure definition to define where an application should be deployed. A given environment can have one to many infrastructe definitions of all different types.
 
-The terraform resource for infrastructres take in some basic information, but mainly uses yaml to define the content of the infrastructre. It can sometimes be helpful to create your first infrastructre using the Harness UI and then copy its yaml definiton into terraform. From there you can modify copies as needed.
+The terraform resource for infrastructure takes in some basic information, but mainly uses yaml to define the content of the infrastructure. It can sometimes be helpful to create your first infrastructure using the Harness UI and then copy its yaml definition into terraform. From there you can modify copies as needed.
 
 ```terraform
 module "dev_k8s" {
