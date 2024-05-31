@@ -3,7 +3,7 @@ resource "harness_platform_connector_kubernetes" "sa-cluster" {
   name       = "sa-cluster"
 
   inherit_from_delegate {
-    delegate_selectors = ["sa-gcp"]
+    delegate_selectors = ["sa-cluster"]
   }
 }
 
