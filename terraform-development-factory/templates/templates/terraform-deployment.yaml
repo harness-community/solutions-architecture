@@ -2,9 +2,9 @@
 spec:
   stages:
     - stage:
-        description: ""
         identifier: Prepare_Testing_Cycle
         name: Prepare Testing Cycle
+        description: "Download and configure the Terraform Versions to test"
         spec:
           execution:
             steps:
@@ -26,11 +26,16 @@ spec:
 
                           temp_dir="/tmp/harness/temp_repos/<+pipeline.executionId>/<+pipeline.sequenceId>"
                           mkdir -p $${temp_dir}
-                          git clone -b <+pipeline.variables.branch_name> https://<+pipeline.variables.github_username>:<+pipeline.variables.github_secret>@github.com/<+pipeline.variables.repository_name> $${temp_dir}
+                          cd $${temp_dir}
+
+                          SHA_BRANCH="pr-pull-terraform-<+pipeline.executionId>"
+                          git clone -n https://<+pipeline.variables.github_username>:<+pipeline.variables.github_secret>@github.com/<+pipeline.variables.repository_name> .
+                          git fetch origin <+pipeline.variables.commit_sha>:$${SHA_BRANCH}
+                          git checkout $${SHA_BRANCH}
 
                           OUTPUT_VERSIONS="latest"
-                          if [ -f $${temp_dir}/.terraform_versions ]; then
-                              OUTPUT_VERSIONS=`cat $${temp_dir}/.terraform_versions`
+                          if [ -f .terraform_versions ]; then
+                              OUTPUT_VERSIONS=`cat .terraform_versions`
                           fi
                       type: Inline
                   timeout: 10m
@@ -38,9 +43,9 @@ spec:
         tags: {}
         type: Custom
     - stage:
-        description: ""
-        identifier: Terraform_Build
-        name: Terraform Build
+        identifier: Terraform_Build_Current_Release
+        name: Terraform Build Current Release
+        description: "Deploy the current target branch for the repository"
         spec:
           execution:
             steps:
@@ -55,16 +60,34 @@ spec:
                           useConnectorCredentials: true
                         store:
                           spec:
-                            branch: <+pipeline.variables.branch_name>
+                            branch: <+pipeline.variables.target_branch>
                             connectorRef: <+pipeline.variables.github_connector>
                             folderPath: ${TERRAFORM_FILES_PATH}
                             gitFetchType: Branch
                             repoName: <+pipeline.variables.repository_name>
                           type: Github
+                      backendConfig:
+                        type: Inline
+                        spec:
+                          content: |
+                            terraform {
+                              backend "azurerm" {
+                                resource_group_name  = "StorageAccount-ResourceGroup"
+                                storage_account_name = "stajgoterraform"
+                                container_name       = "tfstate"
+                                key                  = "terraform-harness-structure/<+pipeline.variables.contributor_name>/terraform.tfstate"
+                                use_msi              = true
+                                subscription_id      = "e8389fc5-0cb8-44ab-947b-c6cf62552be0"
+                                tenant_id            = "b229b2bb-5f33-4d22-bce0-730f6474e906"
+                              }
+                            }
                       environmentVariables:
                         - name: TFENV_TERRAFORM_VERSION
                           type: String
                           value: <+repeat.item>
+                      commandFlags:
+                        - commandType: INIT
+                          flag: ; rm -rf terraform.tfstate
                       secretManagerRef: harnessSecretManager
                       varFiles:
                         - varFile:
@@ -77,24 +100,24 @@ spec:
                                 prefix = "<+pipeline.variables.contributor_name>-<+<+repeat.item>.replace(".","_")>"
                             type: Inline
                     provisionerIdentifier: tfplan_<+<+pipeline.variables.contributor_name>.replace("-","_")>_<+<+repeat.item>.replace(".","_")>
-                  timeout: 10m
+                  timeout: 30m
                   type: TerraformPlan
-              - step:
-                  failureStrategies: []
-                  identifier: Terraform_Apply
-                  name: Terraform Apply
-                  spec:
-                    configuration:
-                      type: InheritFromPlan
-                    environmentVariables:
-                      - name: TFENV_TERRAFORM_VERSION
-                        type: String
-                        value: <+repeat.item>
-                    provisionerIdentifier: tfplan_<+<+pipeline.variables.contributor_name>.replace("-","_")>_<+<+repeat.item>.replace(".","_")>
-                  timeout: 10m
-                  type: TerraformApply
-                  when:
-                    stageStatus: Success
+              # - step:
+              #     failureStrategies: []
+              #     identifier: Terraform_Apply
+              #     name: Terraform Apply
+              #     spec:
+              #       configuration:
+              #         type: InheritFromPlan
+              #       environmentVariables:
+              #         - name: TFENV_TERRAFORM_VERSION
+              #           type: String
+              #           value: <+repeat.item>
+              #       provisionerIdentifier: tfplan_<+<+pipeline.variables.contributor_name>.replace("-","_")>_<+<+repeat.item>.replace(".","_")>
+              #     timeout: 30m
+              #     type: TerraformApply
+              #     when:
+              #       stageStatus: Success
         strategy:
           repeat:
             items: <+pipeline.stages.Prepare_Testing_Cycle.spec.execution.steps.Determine_Supported_Terraform_Versions.output.outputVariables.TERRAFORM_VERSIONS.split("\n")>
@@ -103,72 +126,144 @@ spec:
         type: Custom
         when:
           pipelineStatus: Success
-    - stage:
-        description: ""
-        identifier: Terraform_Cleanup
-        name: Terraform Cleanup
-        spec:
-          execution:
-            steps:
-              - step:
-                  identifier: Terraform_Plan
-                  name: Terraform Plan
-                  spec:
-                    configuration:
-                      command: Destroy
-                      configFiles:
-                        moduleSource:
-                          useConnectorCredentials: true
-                        store:
-                          spec:
-                            branch: <+pipeline.variables.branch_name>
-                            connectorRef: <+pipeline.variables.github_connector>
-                            folderPath: ${TERRAFORM_FILES_PATH}
-                            gitFetchType: Branch
-                            repoName: <+pipeline.variables.repository_name>
-                          type: Github
-                      environmentVariables:
-                        - name: TFENV_TERRAFORM_VERSION
-                          type: String
-                          value: <+repeat.item>
-                      secretManagerRef: harnessSecretManager
-                      varFiles:
-                        - varFile:
-                            identifier: terraform.tfvars
-                            spec:
-                              content: |-
-                                harness_platform_account = "<+account.identifier>"
-                                harness_platform_key = "<+pipeline.variables.harness_platform_key>"
+        variables:
+          - name: TERRAFORM_VERSIONS
+            type: String
+            description: ""
+            required: false
+            value: <+pipeline.stages.Prepare_Testing_Cycle.spec.execution.steps.Determine_Supported_Terraform_Versions.output.outputVariables.TERRAFORM_VERSIONS>
+    # - stage:
+    #     identifier: Terraform_Build
+    #     name: Terraform Build
+    #     description: "Deploy the Current Commit to verify"
+    #     spec:
+    #       execution:
+    #         steps:
+    #           - step:
+    #               identifier: Terraform_Plan
+    #               name: Terraform Plan
+    #               spec:
+    #                 configuration:
+    #                   command: Apply
+    #                   configFiles:
+    #                     moduleSource:
+    #                       useConnectorCredentials: true
+    #                     store:
+    #                       spec:
+    #                         commitId: <+pipeline.variables.commit_sha>
+    #                         connectorRef: <+pipeline.variables.github_connector>
+    #                         folderPath: ${TERRAFORM_FILES_PATH}
+    #                         gitFetchType: Commit
+    #                         repoName: <+pipeline.variables.repository_name>
+    #                       type: Github
+    #                   environmentVariables:
+    #                     - name: TFENV_TERRAFORM_VERSION
+    #                       type: String
+    #                       value: <+repeat.item>
+    #                   secretManagerRef: harnessSecretManager
+    #                   varFiles:
+    #                     - varFile:
+    #                         identifier: terraform.tfvars
+    #                         spec:
+    #                           content: |-
+    #                             harness_platform_account = "<+account.identifier>"
+    #                             harness_platform_key = "<+pipeline.variables.harness_platform_key>"
 
-                                prefix = "<+pipeline.variables.contributor_name>-<+<+repeat.item>.replace(".","_")>"
-                            type: Inline
-                    provisionerIdentifier: tfplan_<+<+pipeline.variables.contributor_name>.replace("-","_")>_<+<+repeat.item>.replace(".","_")>
-                  timeout: 10m
-                  type: TerraformPlan
-              - step:
-                  failureStrategies: []
-                  identifier: TerraformDestroy
-                  name: Terraform Destroy
-                  spec:
-                    configuration:
-                      type: InheritFromPlan
-                    environmentVariables:
-                      - name: TFENV_TERRAFORM_VERSION
-                        type: String
-                        value: <+repeat.item>
-                    provisionerIdentifier: tfplan_<+<+pipeline.variables.contributor_name>.replace("-","_")>_<+<+repeat.item>.replace(".","_")>
-                  timeout: 10m
-                  type: TerraformDestroy
-                  when:
-                    stageStatus: Success
-        strategy:
-          repeat:
-            items: <+pipeline.stages.Prepare_Testing_Cycle.spec.execution.steps.Determine_Supported_Terraform_Versions.output.outputVariables.TERRAFORM_VERSIONS.split("\n")>
-            maxConcurrency: ${MAX_CONCURRENCY}
-        tags: {}
-        type: Custom
-        when:
-          pipelineStatus: Success
+    #                             prefix = "<+pipeline.variables.contributor_name>-<+<+repeat.item>.replace(".","_")>"
+    #                         type: Inline
+    #                 provisionerIdentifier: tfplan_<+<+pipeline.variables.contributor_name>.replace("-","_")>_<+<+repeat.item>.replace(".","_")>
+    #               timeout: 30m
+    #               type: TerraformPlan
+    #           - step:
+    #               failureStrategies: []
+    #               identifier: Terraform_Apply
+    #               name: Terraform Apply
+    #               spec:
+    #                 configuration:
+    #                   type: InheritFromPlan
+    #                 environmentVariables:
+    #                   - name: TFENV_TERRAFORM_VERSION
+    #                     type: String
+    #                     value: <+repeat.item>
+    #                 provisionerIdentifier: tfplan_<+<+pipeline.variables.contributor_name>.replace("-","_")>_<+<+repeat.item>.replace(".","_")>
+    #               timeout: 30m
+    #               type: TerraformApply
+    #               when:
+    #                 stageStatus: Success
+    #     strategy:
+    #       repeat:
+    #         items: <+pipeline.stages.Prepare_Testing_Cycle.spec.execution.steps.Determine_Supported_Terraform_Versions.output.outputVariables.TERRAFORM_VERSIONS.split("\n")>
+    #         maxConcurrency: ${MAX_CONCURRENCY}
+    #     tags: {}
+    #     type: Custom
+    #     when:
+    #       pipelineStatus: Success
+    # - stage:
+    #     identifier: Terraform_Cleanup
+    #     name: Terraform Cleanup
+    #     description: "Cleanup Deployed Terraform resources"
+    #     spec:
+    #       execution:
+    #         steps:
+    #           - step:
+    #               identifier: Terraform_Plan
+    #               name: Terraform Plan
+    #               spec:
+    #                 configuration:
+    #                   command: Destroy
+    #                   configFiles:
+    #                     moduleSource:
+    #                       useConnectorCredentials: true
+    #                     store:
+    #                       spec:
+    #                         branch: <+pipeline.variables.target_branch>
+    #                         connectorRef: <+pipeline.variables.github_connector>
+    #                         folderPath: ${TERRAFORM_FILES_PATH}
+    #                         gitFetchType: Branch
+    #                         repoName: <+pipeline.variables.repository_name>
+    #                       type: Github
+    #                   environmentVariables:
+    #                     - name: TFENV_TERRAFORM_VERSION
+    #                       type: String
+    #                       value: <+repeat.item>
+    #                   secretManagerRef: harnessSecretManager
+    #                   varFiles:
+    #                     - varFile:
+    #                         identifier: terraform.tfvars
+    #                         spec:
+    #                           content: |-
+    #                             harness_platform_account = "<+account.identifier>"
+    #                             harness_platform_key = "<+pipeline.variables.harness_platform_key>"
+
+    #                             prefix = "<+pipeline.variables.contributor_name>-<+<+repeat.item>.replace(".","_")>"
+    #                         type: Inline
+    #                 provisionerIdentifier: tfplan_<+<+pipeline.variables.contributor_name>.replace("-","_")>_<+<+repeat.item>.replace(".","_")>
+    #               timeout: 30m
+    #               type: TerraformPlan
+    #           - step:
+    #               failureStrategies: []
+    #               identifier: TerraformDestroy
+    #               name: Terraform Destroy
+    #               spec:
+    #                 configuration:
+    #                   type: InheritFromPlan
+    #                 environmentVariables:
+    #                   - name: TFENV_TERRAFORM_VERSION
+    #                     type: String
+    #                     value: <+repeat.item>
+    #                 provisionerIdentifier: tfplan_<+<+pipeline.variables.contributor_name>.replace("-","_")>_<+<+repeat.item>.replace(".","_")>
+    #               timeout: 30m
+    #               type: TerraformDestroy
+    #               when:
+    #                 stageStatus: Success
+    #     strategy:
+    #       repeat:
+    #         items: <+pipeline.stages.Prepare_Testing_Cycle.spec.execution.steps.Determine_Supported_Terraform_Versions.output.outputVariables.TERRAFORM_VERSIONS.split("\n")>
+    #         maxConcurrency: ${MAX_CONCURRENCY}
+    #     tags: {}
+    #     type: Custom
+    #     when:
+    #       pipelineStatus: All
   variables:
     - name: harness_platform_key
       description: Enter the github identity of the contributor
@@ -182,8 +277,12 @@ spec:
       description: Enter the Repository to clone
       type: String
       value: <+input>
-    - name: branch_name
-      description: Enter the Repository Branch Name from which to deploy
+    - name: target_branch
+      description: Provide the target branch used to validate the previous version of the code to ensure non-breaking changes
+      type: String
+      value: <+input>
+    - name: commit_sha
+      description: Enter the Repository Commit ID from which to deploy
       type: String
       value: <+input>
     - name: github_connector

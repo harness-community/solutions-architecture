@@ -14,6 +14,12 @@ variable "project_name" {
   description = "[Required] Provide an project name.  Must be two or more characters"
 }
 
+variable "create_project" {
+  type        = bool
+  description = "[Optional] Should this execution create a new project"
+  default     = false
+}
+
 variable "repositories" {
   type        = list(string)
   description = "[Required] List of Repositories for which to configure and create pipelines"
@@ -95,7 +101,14 @@ variable "github_secret_location" {
         EOF
   }
 }
+
 variable "github_secret_id" {
   type        = string
   description = "[Required] Name of the GitHub secret to use"
+}
+
+variable "default_repo_branch" {
+  type        = string
+  description = "[Optional] Name of the default branch to which validation will be performed for Push Triggers"
+  default     = "main"
 }

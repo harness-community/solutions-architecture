@@ -1,5 +1,6 @@
 module "rbac_devops" {
-  source = "git@github.com:harness-community/terraform-harness-rbac.git//modules/roles"
+  source  = "harness-community/rbac/harness//modules/roles"
+  version = "0.1.0"
 
   organization_id  = module.org_foo.organization_details.id
   project_id       = module.project_appX.project_details.id
@@ -10,7 +11,8 @@ module "rbac_devops" {
 data "harness_current_account" "current" {}
 
 module "preprod" {
-  source = "git@github.com:harness-community/terraform-harness-rbac.git//modules/resource_groups"
+  source  = "harness-community/rbac/harness//modules/resource_groups"
+  version = "0.1.0"
 
   harness_platform_account = data.harness_current_account.current.account_id
   organization_id          = module.org_foo.organization_details.id
@@ -32,7 +34,8 @@ module "preprod" {
 }
 
 module "devops" {
-  source = "git@github.com:harness-community/terraform-harness-rbac.git//modules/user_groups"
+  source  = "harness-community/rbac/harness//modules/user_groups"
+  version = "0.1.0"
 
   organization_id   = module.org_foo.organization_details.id
   project_id        = module.project_appX.project_details.id

@@ -1,5 +1,6 @@
 module "dev" {
-  source = "git@github.com:harness-community/terraform-harness-delivery.git//modules/environments"
+  source  = "harness-community/delivery/harness//modules/environments"
+  version = "0.1.0"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id
@@ -18,7 +19,8 @@ environment:
 }
 
 module "dev_k8s" {
-  source = "git@github.com:harness-community/terraform-harness-delivery.git//modules/infrastructures"
+  source  = "harness-community/delivery/harness//modules/infrastructures"
+  version = "0.1.0"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id
@@ -35,7 +37,8 @@ spec:
 }
 
 module "appX" {
-  source = "git@github.com:harness-community/terraform-harness-delivery.git//modules/services"
+  source  = "harness-community/delivery/harness//modules/services"
+  version = "0.1.0"
 
   organization_id = module.org_foo.organization_details.id
   project_id      = module.project_appX.project_details.id
