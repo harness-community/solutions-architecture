@@ -208,6 +208,10 @@ Breaking changes made to templates using branching should be created on a new br
 
 The use of default values in inputs can often be used to turn what would be a breaking change into a backwards compatible one.  So when changing the input interface your template expects, all effort should be made to find a default value for that input that can preserve the current behavior.  For example, take a template that works on all files in a directory, but there is a need to add a filter parameter which can make it operate on a subset of files.  Choosing a default value of `**/*` can make the template work as-is for current users, while allowing someone to modify that filter and narrow down the scope to a subset of the files.
 
+## Template Heiarchy
+
+Where should a template live?  Account/Org/Project
+
 ## Conclusion
 
 Templates are a powerful way to standardize processes, centralize common tasks to avoid code duplication and maximize reuse and help end users get started quickly.  Applying the concepts above allows for maximum reuse, while minimizing the disruption to template consumers during update.
