@@ -155,7 +155,7 @@ resource "harness_platform_connector_aws" "sales_eks_aws_assumed" {
   identifier = "${var.name}_sales_eks_aws_assumed"
   name       = "${var.name}_sales_eks_aws_assumed"
 
-  inherit_from_delegate {
+  irsa {
     delegate_selectors = [
       local.delegate_name
     ]
