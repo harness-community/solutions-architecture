@@ -29,3 +29,7 @@ output "aws_connector_id" {
 output "assumed_aws_connector_id" {
   value = harness_platform_connector_aws.sales_eks_aws_assumed.id
 }
+
+output "irsa_role_arn" {
+  value = aws_iam_role.sales_eks.arn
+}
