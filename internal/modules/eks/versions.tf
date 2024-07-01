@@ -15,9 +15,9 @@ provider "aws" {
   region = "us-west-2"
   default_tags {
     tags = {
-      owner = "riley.snyder@harness.io"
+      owner = "implementationengineering@harness.io"
       note  = "should delete at 5pm CST"
-      ttl   = "-1"
+      ttl   = "24h"
     }
   }
 }
