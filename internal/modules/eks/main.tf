@@ -71,7 +71,7 @@ data "aws_iam_policy_document" "sales_eks" {
       test     = "StringEquals"
       variable = "${module.eks.oidc_provider}:sub"
       values = [
-        "system:serviceaccount:harness-delegate-ng:${delegate_name}"
+        "system:serviceaccount:harness-delegate-ng:${local.delegate_name}"
       ]
     }
 

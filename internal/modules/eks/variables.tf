@@ -3,6 +3,6 @@ variable "name" {
 }
 
 variable "desired_size" {
-  type = number
+  type    = number
   default = 2
 }

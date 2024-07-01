@@ -11,6 +11,6 @@ output "region" {
 }
 
 output "delegate_name" {
-  value = locals.delegate_name
+  value = local.delegate_name
 }
 
