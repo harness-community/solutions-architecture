@@ -341,7 +341,7 @@ resource "harness_platform_triggers" "this" {
   name       = "${var.name}_temp_eks"
   org_id     = var.org
   project_id = var.proj
-  target_id  = "${var.name}_temp_eks"
+  target_id  = harness_platform_pipeline.this.id
   yaml       = <<-EOT
 trigger:
   name: ${var.name}_temp_eks
@@ -351,7 +351,7 @@ trigger:
   tags: {}
   orgIdentifier: ${var.org}
   projectIdentifier: ${var.proj}
-  pipelineIdentifier: ${var.name}_temp_eks
+  pipelineIdentifier: ${harness_platform_pipeline.this.id}
   source:
     type: Scheduled
     spec:
