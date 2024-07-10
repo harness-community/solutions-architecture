@@ -45,7 +45,7 @@ resource "harness_platform_workspace" "this" {
   project_id              = var.proj
   provisioner_type        = "opentofu"
   provisioner_version     = "1.7.0"
-  repository              = "https://github.com/harness-community/solutions-architecture"
+  repository              = "solutions-architecture"
   repository_branch       = "main"
   repository_path         = "internal/modules/eks"
   cost_estimation_enabled = true
