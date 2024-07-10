@@ -333,15 +333,15 @@ pipeline:
         when:
           pipelineStatus: Success
           condition: <+trigger.type> != "Scheduled"
-  EOT
+EOT
 }
 
 resource "harness_platform_triggers" "this" {
-  identifier = ${var.name}_temp_eks
-  name       = ${var.name}_temp_eks
+  identifier = "${var.name}_temp_eks"
+  name       = "${var.name}_temp_eks"
   org_id     = var.org
   project_id = var.proj
-  target_id  = ${var.name}_temp_eks
+  target_id  = "${var.name}_temp_eks"
   yaml       = <<-EOT
 trigger:
   name: ${var.name}_temp_eks
@@ -359,6 +359,5 @@ trigger:
       spec:
         type: UNIX
         expression: 0 ${var.utc_destroy_hr} * * *
-
-    EOT
+EOT
 }
