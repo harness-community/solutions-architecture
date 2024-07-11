@@ -143,6 +143,19 @@ pipeline:
                   when:
                     stageStatus: Success
                     condition: <+trigger.type> == "Scheduled"
+                  failureStrategies:
+                    - onFailure:
+                        errors:
+                          - AllErrors
+                        action:
+                          type: Retry
+                          spec:
+                            retryCount: 5
+                            onRetryFailure:
+                              action:
+                                type: MarkAsFailure
+                            retryIntervals:
+                              - 1m
           platform:
             os: Linux
             arch: Amd64
