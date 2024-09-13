@@ -20,9 +20,12 @@ import future.keywords.in
 # 	forbidden_value    = The returned forbidden_item value for the currently evaluated step
 
 # Approved Templates
-approved_templates = ["Valid_CI", "CI_Verification", "account.Blackduck_Scanning"]
+approved_templates = []
 
-forbidden_items = ["account.GITHUB_PASSWORD", "testing", "account.Azure_Lab_SPN_Client_Secret", "api_key"]
+forbidden_items = [
+    "testing",
+    "<+secrets.getValue(\"testing\")>"
+]
 
 ignore_keys = ["tokenRef", "secretRef"]
 
