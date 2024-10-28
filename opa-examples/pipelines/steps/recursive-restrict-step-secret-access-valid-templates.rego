@@ -1,5 +1,5 @@
-# OPA Policy: Restrict Pipeline value based on list except in approved templates
-# recursive-restrict-step-value-except-valid-template.rego
+# OPA Policy: Restrict Pipeline access to Account-level secrets except in approved templates
+# recursive-restrict-step-secret-access-valid-templates.rego
 package pipeline
 
 import future.keywords.if
@@ -17,17 +17,16 @@ import future.keywords.in
 #     `org`: Indentifier for the specified pipeline's containing organization in Harness
 #     `project`: Indentifier for the specified pipeline's containing project in Harness
 #     `pipeline`: Indentifier for the specified pipeline
-#   forbidden_values   = Used as the base string to trigger the policy deeper check.
+#   flag_string   = Used as the base string to trigger the policy deeper check.
 #   ignore_keys      = List of key names to ignore when evaluating the document - e.g. ["tokenRef", "secretRef"]
 #   error_message = Displays the error message using sprintf and is used to control what information the policy returns when a violation occurs
 
 approved_templates = []
-# If allowing project or org level templates, then those must be defined individually
-# and this value should be false
 allow_any_account_template = true
 
-forbidden_values = []
-ignore_keys = []
+
+flag_string = "account."
+ignore_keys = ["templateRef"]
 
 allowed_pipelines = [
 #   {"org":"org_id", "project": "project_id", "pipeline": "pipeline_id"}
@@ -60,15 +59,44 @@ deny[msg] {
   not is_approved_template(evaluated_step)
 
   # Return the object with value and ignore empty
-  some forbidden_item in forbidden_values
-  filtered_data := return_found_with_value(evaluated_step, forbidden_item, false)
+  filtered_data := return_found_with_value(evaluated_step, "secrets.getValue", false)
   filtered_data != {}
 
   # Verify that the returned value is not a key that should be ignored
   not array_contains(ignore_keys, filtered_data.key)
 
+  # If the value returned matches the pattern for the ignored value
+  contains(filtered_data.value, concat("",["<+secrets.getValue(\"",flag_string]))
+
   # Then raise a message
   msg = error_message(evaluated_step, filtered_data.value)
+}
+
+# Deny pipelines with steps that include secret variables that match criteria
+deny[msg] {
+  # Only enforce this policy against restricted pipelines
+  not is_pipeline_enforced
+
+  # Return all Step Resources
+  some evaluated_step in all_resources("step")
+
+  # Validate this step not included in a valid template
+  not is_approved_template(evaluated_step)
+
+  # Find all paths with a key of `type` and value `Secret`
+  [path, value] := walk(input)
+  array_contains(path, "type")
+  value == "Secret"
+
+  # If the found entry in the same document path as the current step
+  startswith(format_notated_array(path), evaluated_step.document_path)
+
+  # And the value begins with the flagged value
+  resource_hit = return_object_by_notation(array.slice(path, 0, count(path) - 1))
+  startswith(resource_hit.value, flag_string)
+
+  # Then raise a message
+  msg = error_message(evaluated_step, resource_hit.value)
 }
 
 # Verify the templates based on the hierachy of the pipeline
@@ -175,8 +203,7 @@ return_resources_with_stepGroup(resource) := resource_stepGroup if {
 return_found_with_value(evaluated_step, filter_value, exact_match) := output if {
   exact_match == false
   [path, value] := walk(evaluated_step)
-#   contains(value, filter_value)
-  regex.match(filter_value, value)
+  contains(value, filter_value)
   output = {"match": exact_match, "value": value, "key": path[count(path) - 1], "filter": filter_value, "path": format_notated_array(path)}
 } else := output if {
   [path, value] := walk(evaluated_step)
