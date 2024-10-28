@@ -92,7 +92,7 @@ deny[msg] {
 
     # Finally, process a failure if the required template does not exist in the current stage. If found,
     # the length of the list will be greater than zero
-    count([elem | some elem in step_objects; verify_step_templates(elem)]) <= 0
+    count([elem | some elem in step_objects; verify_step_templates(elem)]) != count(mandatory_templates)
 
     # Display the error message.
 	msg = error_message(stage)
