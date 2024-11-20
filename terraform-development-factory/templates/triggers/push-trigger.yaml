@@ -16,6 +16,7 @@ source:
             operator: Equals
             value: "false"
         headerConditions: []
+        jexlCondition: "!<+trigger.payload.ref>.startsWith(\"refs/tags/\") && !<+trigger.payload.ref>.startsWith(\"refs/heads/pr-pull-terraform\")"
         repoName: ${REPOSITORY}
         actions: []
 inputYaml: |
@@ -33,9 +34,12 @@ inputYaml: |
           - name: repository_name
             type: String
             value: ${REPOSITORY}
-          - name: branch_name
+          - name: target_branch
             type: String
-            value: <+trigger.targetBranch>
+            value: ${DEFAULT_REPO_BRANCH}
+          - name: commit_sha
+            type: String
+            value: <+trigger.commitSha>
           - name: github_connector
             type: String
             value: ${GITHUB_CONNECTOR}

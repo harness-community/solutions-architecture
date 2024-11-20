@@ -34,9 +34,12 @@ inputYaml: |
           - name: repository_name
             type: String
             value: ${REPOSITORY}
-          - name: branch_name
+          - name: target_branch
             type: String
-            value: <+trigger.sourceBranch>
+            value: <+trigger.targetBranch>
+          - name: commit_sha
+            type: String
+            value: <+trigger.commitSha>
           - name: github_connector
             type: String
             value: ${GITHUB_CONNECTOR}

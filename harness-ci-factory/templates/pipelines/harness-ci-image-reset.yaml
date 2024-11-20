@@ -6,6 +6,19 @@ stages:
       description: Reads official Harness API to gather a list of the Harness Images used for pipeline execution
       template:
         templateRef: ${GATHER_SCAN_TEMPLATE}
+        templateInputs:
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    identifier: get_list_of_images_to_update
+                    type: ShellScript
+                    spec:
+                      environmentVariables:
+                        - name: REGISTRY
+                          type: String
+                          value: "\"ignored\""
   - stage:
       name: CLEANUP
       identifier: CLEANUP
@@ -33,9 +46,10 @@ stages:
       tags: {}
       when:
         pipelineStatus: Success
+        condition: (<+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.custom_images> != "")
       strategy:
         repeat:
-          items: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images.split(",")>
+          items: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.custom_images.split(",")>
           maxConcurrency: 5
       variables:
         - name: field_name
