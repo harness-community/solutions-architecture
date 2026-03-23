@@ -1,0 +1,304 @@
+template:
+  name: Feature Flag Clean-up Stage
+  identifier: Feature_Flag_Cleanup_Stage
+  versionLabel: v1
+  type: Stage
+  projectIdentifier: Harness_Split
+  orgIdentifier: PROD
+  description: Automate feature flag removal with this ready-to-use pipeline stage template. Powered by our AI coding agent, it scans your codebase, removes the feature flags you select, and helps you ship cleaner, leaner code.
+  tags:
+    feature-flag: ""
+    clean-up: ""
+    harness-code: ""
+  icon: data:image/png;base64,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
+  spec:
+    type: CI
+    spec:
+      cloneCodebase: false
+      caching:
+        enabled: true
+        override: true
+      platform:
+        os: Linux
+        arch: Arm64
+      runtime:
+        type: Cloud
+        spec: {}
+      execution:
+        steps:
+          - step:
+              identifier: metadata
+              name: Setting Metadata Up
+              type: Run
+              timeout: 10m
+              spec:
+                shell: Bash
+                command: |-
+                  #!/usr/bin/env bash
+                  
+                  # Metadata Workdir
+                  export METADATA_WORKDIR="/harness/tempdir"
+
+                  # Url and domain
+                  url="<+pipeline.executionUrl>"
+                  domain=$(echo "$url" | awk -F/ '{print $3}')
+                  export METADATA_DOMAIN="$domain"
+                  export METADATA_BASE_URL="https://$domain"
+
+                  # User
+                  export METADATA_USER_NAME="<+pipeline.triggeredBy.name>"
+                  export METADATA_USER_EMAIL="<+pipeline.triggeredBy.email>"
+
+                  # Account metadata
+                  export HARNESS_ACCOUNT=<+account.identifier>
+                  export HARNESS_ORG=<+org.identifier>
+                  export HARNESS_PROJECT=<+project.identifier>
+
+                  export ELEGIBLE_FEATURE_FLAGS="none"
+                outputVariables:
+                  - name: workdir
+                    type: String
+                    value: METADATA_WORKDIR
+                  - name: baseUrl
+                    type: String
+                    value: METADATA_BASE_URL
+                  - name: domain
+                    type: String
+                    value: METADATA_DOMAIN
+                  - name: userName
+                    type: String
+                    value: METADATA_USER_NAME
+                  - name: userEmail
+                    type: String
+                    value: METADATA_USER_EMAIL
+                  - name: account
+                    type: String
+                    value: HARNESS_ACCOUNT
+                  - name: organization
+                    type: String
+                    value: HARNESS_ORG
+                  - name: project
+                    type: String
+                    value: HARNESS_PROJECT
+            contextType: Pipeline
+          - step:
+              type: GitClone
+              name: GitClone
+              identifier: GitClone
+              spec:
+                repoName: <+stage.variables.REPO_NAME>
+                cloneDirectory: /harness/<+stage.variables.REPO_NAME>
+                build:
+                  type: branch
+                  spec:
+                    branch: main
+            contextType: Pipeline
+          - step:
+              type: Run
+              name: Stage setup
+              identifier: stage_setup
+              spec:
+                shell: Bash
+                command: |-
+                  #!/usr/bin/env bash
+
+                  mkdir -p <+steps.metadata.output.outputVariables.workdir>
+
+                  echo "Flag: <+stage.variables.FEATURE_FLAG>"
+                  echo "Flag: <+stage.variables.TREATMENT>"
+                  echo "Flag: <+stage.variables.REASON>"
+
+                  ls -la
+          - step:
+              type: Run
+              name: Generate Prompt
+              identifier: Generate_Prompt
+              spec:
+                shell: Bash
+                command: |-
+                  #!/usr/bin/env bash
+
+                  WORKING_DIR="<+steps.metadata.output.outputVariables.workdir>"
+
+                  OUTPUT_TASK="${WORKING_DIR}/task.txt"
+                  FFF_OUTPUT="<+stage.variables.FEATURE_FLAG> (treatment=<+stage.variables.TREATMENT>; reason=<+stage.variables.REASON>)"
+
+                  echo "Please execute the following steps:
+                    - Wrapped in single quotes, here is an string with the pattern '<feature_flag> (treatment=<treatment>; reason=<reason>)', containing the feature flags from a harness environment, to be removed from code if present (name, treatment & reason why it's elegible to remove): '${FFF_OUTPUT}' 
+                    - For the elegible flag:
+                        - Scan the code repository to find files containing references to the flags returned in the prior step. The list of files returned will be referred from now on as the \`pending files list\`.
+                        - For each file in the \`pending file list\`:
+                            - Interact with the filesystem as necessary to read the contents of the file
+                            - If the reference to the flag name is part of an evaluation, proceed as follows:
+                                - Remove all evaluations of the flag, leaving only the source code associated to the elegible treatment for it.
+                                  - If the removed code contains a reference to a variable and there aren't additional references, remove it.
+                                - If the split client is not used for further evaluations in that context, remove it (as well as any package import directives)
+                                - Interact with the filysystem as necessary to write the updated file back overwriting the original one. DO NOT use a different name.
+                            - If it's a public/exported constant, use the name of the constant as a new search target to continue searching the repository for references to it. Add any possible outcome to \`pending-file-list\ so that they're iterated as well within this loop.
+                    - After all files have been updated end the conversation with the next outcome to apply changes in a git repository:
+                        - write a new file named \`${WORKING_DIR}/branch.txt\` with the branch name, should be short, descriptive and have no spaces and ends with a suffix number like a timestamp.
+                        - write a new file named \`${WORKING_DIR}/commit.txt\` with a commit description message.
+                        - write a new file named \`${WORKING_DIR}/pr_title.txt\`
+                        - write a new file named \`${WORKING_DIR}/pr_description.txt\` within a summary about all performed changes." > ${OUTPUT_TASK}
+          - step:
+              type: Plugin
+              name: code-agent
+              identifier: codeagent
+              spec:
+                connectorRef: account.harnessImage
+                registryRef: fme-docker
+                image: sarrubiaharness/ai-code-agent:v1.2.0
+                imagePullPolicy: Always
+                envVariables:
+                  TASK_FILE: <+steps.metadata.output.outputVariables.workdir>/task.txt
+                  WORKING_DIRECTORY: /harness
+                  ANTHROPIC_API_KEY: <+stage.variables.LLM_AUTH_TOKEN>
+                  MAX_ITERATIONS: 250
+                volumes:
+                  - name: workspace
+                    mountPath: /harness
+              timeout: 10m
+              failureStrategies:
+                - onFailure:
+                    errors:
+                      - AllErrors
+                    action:
+                      type: Retry
+                      spec:
+                        retryCount: 3
+                        retryIntervals:
+                          - 10s
+                          - 20s
+                          - 30s
+                        onRetryFailure:
+                          action:
+                            type: Abort
+          - step:
+              type: Run
+              name: Push PR
+              identifier: Push_PR
+              spec:
+                shell: Bash
+                command: |-
+                  #!/bin/bash
+                  set -ex
+
+                  REPO_NAME=${HARNESS_REPO_NAME}
+                  : ${HARNESS_ACCOUNT:?"HARNESS_ACCOUNT environment variable is required"}
+                  : ${HARNESS_ORG:?"HARNESS_ORG environment variable is required"}
+                  : ${HARNESS_PROJECT:?"HARNESS_PROJECT environment variable is required"}
+                  : ${HARNESS_API_TOKEN:?"HARNESS_API_TOKEN environment variable is required"}
+                  : ${HARNESS_BASE_URL?="HARNESS_BASE_URL failed to populate from execution URL"}
+                  : ${HARNESS_COMMITTER_NAME:?"HARNESS_COMMITTER_NAME environment variable is required"}
+                  : ${HARNESS_COMMITTER_EMAIL:?"HARNESS_COMMITTER_EMAIL environment variable is required"}
+
+                  echo "- Pushing PR in repository '${REPO_NAME}'..."
+                  echo "  - HARNESS_ACCOUNT='${HARNESS_ACCOUNT}'"
+                  echo "  - HARNESS_ORG='${HARNESS_ORG}'"
+                  echo "  - HARNESS_PROJECT='${HARNESS_PROJECT}'"
+                  echo "  - HARNESS_API_TOKEN='${HARNESS_API_TOKEN}'"
+                  echo "  - HARNESS_BASE_URL='${HARNESS_BASE_URL}'"
+
+                  BRANCH_NAME=$(cat ${WORKING_DIR}/branch.txt)
+                  COMMIT_MESSAGE=$(cat ${WORKING_DIR}/commit.txt)
+                  PR_DESCRIPTION=$(cat ${WORKING_DIR}/pr_description.txt)
+                  PR_TITLE=$(cat ${WORKING_DIR}/pr_title.txt)
+                  GITIGNORE_FILE=".gitignore"
+                  PATTERN=$(basename ${WORKING_DIR})
+
+                  cd ${REPO_NAME}
+
+                  if ! grep -qxF "$PATTERN" "$GITIGNORE_FILE"; then
+                      echo "$PATTERN" >> "$GITIGNORE_FILE"
+                      echo "✓ Dir '$PATTERN' added to $GITIGNORE_FILE"
+                  else
+                      echo "✓ Dir '$PATTERN' already exist in $GITIGNORE_FILE"
+                  fi
+
+                  # as of today, pipelines in QA don't have a git user configured
+                  if ! git config get user.email; then
+                      git config --global user.email "${HARNESS_COMMITTER_EMAIL}"
+                      git config --global user.name "${HARNESS_COMMITTER_NAME}"
+                  fi
+
+                  git checkout -b ${BRANCH_NAME}
+                  git add .
+                  git commit -m "${COMMIT_MESSAGE}"
+                  git push origin ${BRANCH_NAME}
+
+                  PR_DESCRIPTION_ESCAPED=$(echo "$PR_DESCRIPTION" | jq -Rs .)
+
+                  QUERY_PARAMS="accountIdentifier=${HARNESS_ACCOUNT}&orgIdentifier=${HARNESS_ORG}&projectIdentifier=${HARNESS_PROJECT}"
+                  curl -i -X POST \
+                    "${HARNESS_BASE_URL}/code/api/v1/repos/${REPO_NAME}/pullreq?${QUERY_PARAMS}" \
+                    -H 'Content-Type: application/json' \
+                    -H "x-api-key: ${HARNESS_API_TOKEN}" \
+                    -d @- <<EOF
+                      {
+                          "bypass_rules": true,
+                          "description": ${PR_DESCRIPTION_ESCAPED},
+                          "is_draft": true,
+                          "labels": [],
+                          "reviewer_ids": [],
+                          "source_branch": "${BRANCH_NAME}",
+                          "source_repo_ref": "",
+                          "target_branch": "main",
+                          "title": "${PR_TITLE}",
+                          "user_group_reviewer_ids": []
+                      }
+                  EOF
+                envVariables:
+                  WORKING_DIR: <+steps.metadata.output.outputVariables.workdir>
+                  HARNESS_BASE_URL: <+steps.metadata.output.outputVariables.baseUrl>
+                  HARNESS_ACCOUNT: <+steps.metadata.output.outputVariables.account>
+                  HARNESS_ORG: <+steps.metadata.output.outputVariables.organization>
+                  HARNESS_PROJECT: <+steps.metadata.output.outputVariables.project>
+                  HARNESS_COMMITTER_NAME: <+steps.metadata.output.outputVariables.userName>
+                  HARNESS_COMMITTER_EMAIL: <+steps.metadata.output.outputVariables.userEmail>
+                  HARNESS_REPO_NAME: <+stage.variables.REPO_NAME>
+                  HARNESS_API_TOKEN: <+stage.variables.HARNESS_API_TOKEN>
+              volumes:
+                - name: workspace
+                  mountPath: /harness
+    variables:
+      - name: HARNESS_API_TOKEN
+        type: String
+        description: Harness API Token
+        required: true
+        value: <+input>
+      - name: REPO_NAME
+        type: String
+        description: Repository URL
+        required: true
+        value: <+input>
+      - name: FME_ADMIN_APIKEY
+        type: String
+        description: FME Admin API Key
+        required: true
+        value: <+input>
+      - name: FME_PROJECT_ID
+        type: String
+        description: FME Project Id
+        required: true
+        value: <+input>
+      - name: FEATURE_FLAG
+        type: String
+        description: The Feature Flag to be removed from the codebase
+        required: true
+        value: <+input>
+      - name: TREATMENT
+        type: String
+        description: The Feature Flag Treatment branch to keep on the codebase
+        required: true
+        value: <+input>
+      - name: REASON
+        type: String
+        description: Short description about why this feature flag will be cleaned up
+        required: true
+        value: <+input>
+      - name: LLM_AUTH_TOKEN
+        type: Secret
+        description: ""
+        required: true
+        default: ANTHROPIC_LLM_AUTH_TOKEN_DEV
+        value: <+input>
