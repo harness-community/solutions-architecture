@@ -667,7 +667,7 @@ template:
 
                         echo "Please execute the following steps:
                           - Wrapped between marker: `<@>` , here is an object serialized in JSON, where Top-level keys are feature flag names (e.g. sdk_push_notifications), and each holds an array of entries — one per environment (e.g. Prod and Stage): <@>${FFF_OUTPUT}<@>
-                          - The provided object MUST BE filtered by the feature flags that follows the next criteria: '${SELECTION_CRITERIA}' 
+                          - The provided object MUST BE filtered by the feature flags that follows the next criteria: '${SELECTION_CRITERIA}'
                           - The output MUST BE a ONLY ONE string comma separated where each feature flag in the string follows this pattern: '{feature_flag_name} (treatment={ff.treatment}; reason={reason})'. Where feature_flag_name is the Feature Flag Name, the treatment is the feature flag treatment and the reason is a very short sentence that explains why the feature flag has been selected.
                             - The output comma separated string must be write in a new file named \`${WORKING_DIR}/filtered_flags.txt\`" > ${OUTPUT_TASK}
                 - step:
@@ -677,7 +677,7 @@ template:
                     spec:
                       connectorRef: account.harnessImage
                       registryRef: fme-docker
-                      image: sarrubiaharness/ai-code-agent:v1.2.0
+                      image: harness/ai-code-agent:v1.2.0
                       imagePullPolicy: Always
                       envVariables:
                         TASK_FILE: <+steps.metadata.output.outputVariables.workdir>/task.txt
@@ -831,7 +831,7 @@ template:
                         FFF_OUTPUT="<+pipeline.stages.app.spec.execution.steps.HarnessApproval_1.output.approverInputs.FeatureFlags>"
 
                         echo "Please execute the following steps:
-                          - Wrapped in single quotes, here is an string with the pattern '<feature_flag> (treatment=<treatment>; reason=<reason>)', containing the feature flags from a harness environment, to be removed from code if present (name, treatment & reason why it's elegible to remove): '${FFF_OUTPUT}' 
+                          - Wrapped in single quotes, here is an string with the pattern '<feature_flag> (treatment=<treatment>; reason=<reason>)', containing the feature flags from a harness environment, to be removed from code if present (name, treatment & reason why it's elegible to remove): '${FFF_OUTPUT}'
                           - For the elegible flag:
                               - Scan the code repository to find files containing references to the flags returned in the prior step. The list of files returned will be referred from now on as the \`pending files list\`.
                               - For each file in the \`pending file list\`:
@@ -854,7 +854,7 @@ template:
                     spec:
                       connectorRef: account.harnessImage
                       registryRef: fme-docker
-                      image: sarrubiaharness/ai-code-agent:v1.2.0
+                      image: harness/ai-code-agent:v1.2.0
                       imagePullPolicy: Always
                       envVariables:
                         TASK_FILE: <+pipeline.stages.FFCleanupStage.spec.execution.steps.metadata.output.outputVariables.workdir>/task.txt

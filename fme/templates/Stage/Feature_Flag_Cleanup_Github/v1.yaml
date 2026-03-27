@@ -184,7 +184,7 @@ template:
                   FFF_OUTPUT="<+stage.variables.FEATURE_FLAG> (treatment=<+stage.variables.TREATMENT>; reason=<+stage.variables.REASON>)"
 
                   echo "Please execute the following steps:
-                    - Wrapped in single quotes, here is an string with the pattern '<feature_flag> (treatment=<treatment>; reason=<reason>)', containing the feature flags from a harness environment, to be removed from code if present (name, treatment & reason why it's elegible to remove): '${FFF_OUTPUT}' 
+                    - Wrapped in single quotes, here is an string with the pattern '<feature_flag> (treatment=<treatment>; reason=<reason>)', containing the feature flags from a harness environment, to be removed from code if present (name, treatment & reason why it's elegible to remove): '${FFF_OUTPUT}'
                     - For the elegible flag:
                         - Scan the code repository to find files containing references to the flags returned in the prior step. The list of files returned will be referred from now on as the \`pending files list\`.
                         - For each file in the \`pending file list\`:
@@ -207,7 +207,7 @@ template:
               spec:
                 connectorRef: account.harnessImage
                 registryRef: fme-docker
-                image: sarrubiaharness/ai-code-agent:v1.2.0
+                image: harness/ai-code-agent:v1.2.0
                 imagePullPolicy: Always
                 envVariables:
                   TASK_FILE: <+steps.metadata.output.outputVariables.workdir>/task.txt
