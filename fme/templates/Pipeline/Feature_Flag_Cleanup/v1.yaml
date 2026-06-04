@@ -598,7 +598,7 @@ template:
                                     if occurrences:
                                         to_dump[flag_name] = [ff.to_dict() for ff in flag]
 
-                            with open(f"{output_dir}/elegible_flags.json", 'w') as f:
+                            with open(f"{output_dir}/eligible_flags.json", 'w') as f:
                                 json.dump(to_dump, f)
 
                         if __name__ == '__main__':
@@ -620,13 +620,13 @@ template:
                         SELECTION_CRITERIA="<+pipeline.variables.FEATURE_FLAG_SELECTION_CRITERIA>"
                         WORKING_DIR="<+steps.metadata.output.outputVariables.workdir>"
                         OUTPUT_TASK="${WORKING_DIR}/task.txt"
-                        FFF_OUTPUT="$(cat ${WORKING_DIR}/elegible_flags.json)"
+                        FFF_OUTPUT="$(cat ${WORKING_DIR}/eligible_flags.json)"
 
                         echo "Please execute the following steps:
-                          - Wrapped between marker: `<@>` , here is an object serialized in JSON, where Top-level keys are feature flag names (e.g. sdk_push_notifications), and each holds an array of entries — one per environment (e.g. Prod and Stage): <@>${FFF_OUTPUT}<@>
+                          - Wrapped between marker: <@> , here is an object serialized in JSON, where Top-level keys are feature flag names (e.g. sdk_push_notifications), and each holds an array of entries — one per environment (e.g. Prod and Stage): <@>${FFF_OUTPUT}<@>
                           - The provided object MUST BE filtered by the feature flags that follows the next criteria: '${SELECTION_CRITERIA}'
                           - The output MUST BE a ONLY ONE string comma separated where each feature flag in the string follows this pattern: '{feature_flag_name} (treatment={ff.treatment}; reason={reason})'. Where feature_flag_name is the Feature Flag Name, the treatment is the feature flag treatment and the reason is a very short sentence that explains why the feature flag has been selected.
-                            - The output comma separated string must be write in a new file named \`${WORKING_DIR}/filtered_flags.txt\`" > ${OUTPUT_TASK}
+                            - The output comma separated string must be write in a new file named '${WORKING_DIR}/filtered_flags.txt'" > ${OUTPUT_TASK}
                 - step:
                     type: Plugin
                     name: Feature Flag Selector Agent
@@ -903,7 +903,7 @@ template:
                         mountPath: /harness
     variables:
       - name: HARNESS_API_TOKEN
-        type: String
+        type: Secret
         description: Harness API Token
         required: true
         value: <+input>
@@ -913,7 +913,7 @@ template:
         required: true
         value: <+input>
       - name: FME_ADMIN_APIKEY
-        type: String
+        type: Secret
         description: FME Admin API Key
         required: true
         value: <+input>
