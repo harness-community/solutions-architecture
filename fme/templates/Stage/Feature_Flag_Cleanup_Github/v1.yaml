@@ -328,18 +328,13 @@ template:
         required: true
         value: <+input>
       - name: REPO_API_TOKEN
-        type: String
+        type: Secret
         description: Repository API Token
         required: true
         value: <+input>
       - name: REPO_USERNAME
         type: String
-        description: Repository API Token
-        required: true
-        value: <+input>
-      - name: FME_ADMIN_APIKEY
-        type: String
-        description: FME Admin API Key
+        description: Repository Username
         required: true
         value: <+input>
       - name: FME_PROJECT_ID
