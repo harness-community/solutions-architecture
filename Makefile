@@ -76,6 +76,9 @@ fmt_all:
 testing_cleanup:
 	@(rm -rf ${TEMPLATE_DIR}/.terraform)
 
+.PHONY: deploy
+deploy: init plan apply
+
 .PHONY: cycle
 cycle: destroy apply plan
 

@@ -59,6 +59,11 @@ variable "container_registry_connector_ref" {
   description = "Container Registry Connector Reference"
 }
 
+variable "external_image_connector_ref" {
+  type        = string
+  description = "External Docker Image Connector Reference"
+}
+
 variable "kubernetes_connector_ref" {
   type        = string
   description = "Kubernetes Connector Reference"

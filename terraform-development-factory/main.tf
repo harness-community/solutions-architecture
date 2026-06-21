@@ -1,6 +1,6 @@
 module "organization" {
   source  = "harness-community/structure/harness//modules/organizations"
-  version = "0.1.2"
+  version = "0.1.3"
 
   name     = var.organization_name
   existing = var.create_organization ? false : true
@@ -8,10 +8,11 @@ module "organization" {
 
 module "project" {
   source  = "harness-community/structure/harness//modules/projects"
-  version = "0.1.2"
+  version = "0.1.3"
 
   name            = var.project_name
   organization_id = module.organization.details.id
+  existing        = var.create_project ? false : true
 }
 
 module "templates" {
@@ -85,6 +86,7 @@ module "push_triggers" {
         var.harness_api_key_secret
       )
       REPOSITORY : each.value
+      DEFAULT_REPO_BRANCH : var.default_repo_branch
       PIPELINE_ID : module.pipelines[each.value].details.id
       GITHUB_CONNECTOR : (
         var.github_connector_location != "project"

@@ -19,8 +19,8 @@ spec:
             description: This step will create a new Dockerfile to be leveraged in the upcoming Build and Push step.  In addition this step leverages the RUNNER_IMAGE retrieved from the 'Gather Harness Images' stage.
             type: Run
             spec:
-              connectorRef: account.harnessImage
-              image: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.runner>
+              connectorRef: ${HARNESS_IMAGE_CONNECTOR}
+              image: <+stage.variables.RUN_STEP_RUNNER>
               shell: Sh
               command: |
                 set -eo pipefail
@@ -44,7 +44,7 @@ spec:
             name: Build and Push to ACR
             spec:
               connectorRef: ${CONTAINER_REGISTRY_CONNECTOR}
-              repository: <+pipeline.variables.registry>/<+stage.variables.IMAGE_NAME>
+              repository: <+stage.variables.REGISTRY>/<+stage.variables.IMAGE_NAME>
               tags:
                 - <+stage.variables.IMAGE_VERSION>
               dockerfile: <+stage.variables.IMAGE_NAME>/Dockerfile
@@ -53,7 +53,23 @@ spec:
               stageStatus: Success
   tags: {}
   variables:
-    - name: images
-      description: ""
+    - name: REGISTRY
       type: String
-      value: <+pipeline.stages.gather_harness_images.spec.execution.steps.get_list_of_images_to_update.output.outputVariables.images>
+      description: Container registry name to which the image will be uploaded - e.g. registry.company.com
+      value: <+input>
+    - name: IMAGE
+      type: String
+      description: Full repository path and tag for the image - e.g. harness/ci-addon:1.16.0
+      value: <+input>
+    - name: IMAGE_NAME
+      type: String
+      description: Name of the image to create - e.g. harness/ci-addon
+      value: <+input>
+    - name: IMAGE_VERSION
+      type: String
+      description: Version Tag of the image to create - e.g. 1.16.0
+      value: <+input>
+    - name: RUN_STEP_RUNNER
+      type: String
+      description: Container Image to be used for the run_step to generate a new Dockerfile
+      value: <+input>
