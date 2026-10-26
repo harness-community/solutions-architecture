@@ -25,7 +25,7 @@ import future.keywords.in
 approved_templates 	= ["Valid_CI", "CI_Verification", "account.Blackduck_Scanning"]
 
 filter_object 		= "spec.image"
-forbidden_items 	= ["maven:3.8-jdk-11"]
+forbidden_items 	= ["^public\.ecr\.aws/"]
 error_message(step, step_object) := sprintf("Failed: The stage '%s' has step '%s' that is forbidden image '%s' and only valid when used with an approved template %s.  Currently using an image of %s", [step.stage.name, step.name, step.spec.image, approved_templates, step_object])
 
 #### END   - Policy Controls ####
@@ -46,7 +46,8 @@ deny[msg] {
 
 	# If no approved template, then we need to evaluate the connectorRef for the step to determine if there is
 	# a forbidden connector in use
-	array_contains(forbidden_items, eval_object)
+	# was: array_contains(forbidden_items, eval_object)
+	array_matches_regex(forbidden_items, eval_object)
 
 	msg = error_message(evaluated_step, eval_object)
 }
@@ -180,6 +181,12 @@ return_object_by_notation(path) := object.get(input, path, {})
 
 array_contains(arr, elem) if {
 	arr[_] = elem
+}
+
+array_matches_regex(patterns, elem) if {
+	is_string(elem)
+	some pattern in patterns
+	regex.match(pattern, elem)
 }
 
 has_key(x, k) if {
